@@ -3,628 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spin & Sip - Beer Drinking Game</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Animated background bubbles */
-        .bubble {
-            position: absolute;
-            background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0.1) 100%);
-            border-radius: 50%;
-            opacity: 0.7;
-            animation: float 10s infinite ease-in-out;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(100vh) scale(0); }
-            20% { transform: translateY(90vh) scale(1); }
-            90% { transform: translateY(-100px) scale(1); }
-        }
-
-        .header {
-            margin-top: 2rem;
-            text-align: center;
-            z-index: 10;
-        }
-
-        h1 {
-            font-size: 4rem;
-            background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-            animation: glow 2s ease-in-out infinite alternate;
-            margin-bottom: 0.5rem;
-        }
-
-        @keyframes glow {
-            from { text-shadow: 0 0 30px rgba(255, 215, 0, 0.5); }
-            to { text-shadow: 0 0 50px rgba(255, 215, 0, 0.8), 0 0 70px rgba(255, 215, 0, 0.6); }
-        }
-
-        .game-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2rem;
-            padding: 2rem;
-            z-index: 10;
-        }
-
-        .wheel-container {
-            position: relative;
-            width: 400px;
-            height: 400px;
-        }
-
-        .wheel {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
-            transition: transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-        }
-
-        .wheel-segment {
-            position: absolute;
-            width: 50%;
-            height: 50%;
-            transform-origin: right bottom;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 0.9rem;
-            text-align: center;
-            padding: 1rem;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .pointer {
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 40px solid #ff6b6b;
-            filter: drop-shadow(0 0 10px rgba(255, 107, 107, 0.8));
-            z-index: 20;
-        }
-
-        .spin-button {
-            padding: 1rem 3rem;
-            font-size: 1.5rem;
-            background: linear-gradient(45deg, #ff6b6b, #ff8e53);
-            border: none;
-            border-radius: 50px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .spin-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
-        }
-
-        .spin-button:active {
-            transform: translateY(0);
-        }
-
-        .spin-button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .spin-button:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .players-section {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            width: 100%;
-            max-width: 600px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .player-input {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .player-input input {
-            flex: 1;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 1rem;
-        }
-
-        .player-input input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .add-player-btn {
-            padding: 0.8rem 1.5rem;
-            background: #4ecdc4;
-            border: none;
-            border-radius: 10px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .add-player-btn:hover {
-            background: #45b7aa;
-            transform: translateY(-2px);
-        }
-
-        .players-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .player-chip {
-            padding: 0.5rem 1rem;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border-radius: 20px;
-            font-size: 0.9rem;
-            position: relative;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .current-player {
-            background: linear-gradient(45deg, #f093fb, #f5576c);
-            box-shadow: 0 0 20px rgba(245, 87, 108, 0.6);
-        }
-
-        .challenge-modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: rgba(26, 26, 46, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 3rem;
-            text-align: center;
-            z-index: 100;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            transition: transform 0.3s ease;
-        }
-
-        .challenge-modal.show {
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .challenge-title {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, #ffd700, #ffed4e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .challenge-description {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            color: #fff;
-        }
-
-        .challenge-button {
-            padding: 1rem 2rem;
-            background: linear-gradient(45deg, #11998e, #38ef7d);
-            border: none;
-            border-radius: 25px;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .challenge-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(56, 239, 125, 0.4);
-        }
-
-        .mini-game {
-            display: none;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            margin-top: 2rem;
-        }
-
-        .reaction-game {
-            text-align: center;
-        }
-
-        .reaction-button {
-            width: 200px;
-            height: 200px;
-            background: #e74c3c;
-            border: none;
-            border-radius: 50%;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            margin: 2rem auto;
-            display: block;
-            transition: all 0.3s ease;
-        }
-
-        .reaction-button.ready {
-            background: #2ecc71;
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        @media (max-width: 768px) {
-            h1 { font-size: 3rem; }
-            .wheel-container {
-                width: 300px;
-                height: 300px;
-            }
-            .wheel-segment { font-size: 0.7rem; }
-            .challenge-modal { padding: 2rem; }
-            .challenge-title { font-size: 2rem; }
-            .challenge-description { font-size: 1.2rem; }
-        }
-    </style>
+    <meta name="description" content="A fun 2D platformer game with pixel-perfect graphics and an integrated level editor">
+    <meta name="theme-color" content="#4c6baf">
+    <title>Pixel Platformer Game</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="favicon.svg" type="image/x-icon">
+    <!-- Preload critical game assets -->
+    <link rel="preload" href="audio/background_music.mp3" as="audio">
+    <link rel="preload" href="audio/jump.mp3" as="audio">
 </head>
 <body>
-    <div class="header">
-        <h1>🍺 Spin & Sip 🍺</h1>
-        <p style="color: #ffd700; font-size: 1.2rem;">The Ultimate Beer Drinking Game</p>
-    </div>
+    <main class="game-container" aria-live="polite">
+        <!-- Game Canvas -->
+        <canvas id="gameCanvas" width="800" height="600" aria-label="Game play area" role="img"></canvas>
 
-    <div class="game-container">
-        <div class="wheel-container">
-            <div class="pointer"></div>
-            <div class="wheel" id="wheel"></div>
-        </div>
+        <!-- Game UI -->
+        <div class="ui" id="ui" aria-live="polite">Level: 1 | Deaths: 0</div>
 
-        <button class="spin-button" id="spinBtn">SPIN THE WHEEL!</button>
-
-        <div class="players-section">
-            <h2 style="margin-bottom: 1rem;">Players</h2>
-            <div class="player-input">
-                <input type="text" id="playerName" placeholder="Enter player name..." maxlength="20">
-                <button class="add-player-btn" id="addPlayerBtn">Add Player</button>
+        <!-- Main Menu -->
+        <section class="menu" id="mainMenu" role="dialog" aria-labelledby="gameTitle">
+            <h1 id="gameTitle">Pixel Platformer</h1>
+            <div class="level-info">Complete challenging levels with increasing difficulty</div>
+            <nav class="menu-buttons">
+                <button id="playButton" aria-label="Start the game">Play Game</button>
+                <button id="levelSelectButton" aria-label="Open level select screen">Level Select</button>
+                <button id="settingsButton" aria-label="Open settings menu">Settings</button>
+                <button id="levelEditorButton" aria-label="Open level editor">Level Editor</button>
+            </nav>
+            <div class="controls-info">
+                Controls: Arrow keys to move, Space or Up Arrow to jump
             </div>
-            <div class="players-list" id="playersList"></div>
-        </div>
+        </section>
 
-        <div class="mini-game reaction-game" id="reactionGame">
-            <h3>Reaction Challenge!</h3>
-            <p>Click the button when it turns green!</p>
-            <button class="reaction-button" id="reactionBtn">Wait...</button>
-            <p id="reactionResult"></p>
-        </div>
+        <!-- Level Select Menu -->
+        <section class="menu" id="levelSelectMenu" style="display: none;" role="dialog" aria-labelledby="levelSelectTitle">
+            <h2 id="levelSelectTitle">Level Select</h2>
+            <div id="levelButtons" class="level-buttons" role="menu"></div>
+            <button id="backFromLevelSelect" class="back-button" aria-label="Return to main menu">Back</button>
+        </section>
+
+        <!-- Settings Menu -->
+        <section class="menu" id="settingsMenu" style="display: none;" role="dialog" aria-labelledby="settingsTitle">
+            <h2 id="settingsTitle">Settings</h2>
+            <div class="settings-container">
+                <div class="setting">
+                    <label for="musicVolume">Music Volume:</label>
+                    <input type="range" id="musicVolume" min="0" max="100" value="50" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+                    <span id="musicVolumeValue">50%</span>
+                </div>
+                <div class="setting">
+                    <label for="sfxVolume">SFX Volume:</label>
+                    <input type="range" id="sfxVolume" min="0" max="100" value="70" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70">
+                    <span id="sfxVolumeValue">70%</span>
+                </div>
+                <div class="setting checkbox">
+                    <input type="checkbox" id="showFPS" checked>
+                    <label for="showFPS">Show FPS</label>
+                </div>
+                <div class="setting checkbox">
+                    <input type="checkbox" id="pixelPerfect" checked>
+                    <label for="pixelPerfect">Pixel Perfect Rendering</label>
+                </div>
+            </div>
+            <button id="backFromSettings" class="back-button" aria-label="Return to previous screen">Back</button>
+        </section>
+
+        <!-- Game Over / Level Complete Menu -->
+        <section class="menu" id="gameOverMenu" style="display: none;" role="dialog" aria-labelledby="levelCompleteText">
+            <h2 id="levelCompleteText">Level Complete!</h2>
+            <div id="levelStats" class="level-stats">
+                Deaths: <span id="levelDeaths">0</span><br>
+                Time: <span id="levelTime">00:00</span>
+            </div>
+            <nav class="menu-buttons">
+                <button id="nextLevelButton" aria-label="Proceed to next level">Next Level</button>
+                <button id="restartButton" aria-label="Restart current level">Restart Level</button>
+                <button id="menuButton" aria-label="Return to main menu">Main Menu</button>
+            </nav>
+        </section>
+
+        <!-- Pause Menu -->
+        <section class="menu" id="pauseMenu" style="display: none;" role="dialog" aria-labelledby="pauseTitle">
+            <h2 id="pauseTitle">Game Paused</h2>
+            <nav class="menu-buttons">
+                <button id="resumeButton" aria-label="Resume game">Resume</button>
+                <button id="restartFromPause" aria-label="Restart current level">Restart Level</button>
+                <button id="settingsFromPause" aria-label="Open settings menu">Settings</button>
+                <button id="exitToMenu" aria-label="Exit to main menu">Exit to Menu</button>
+            </nav>
+        </section>
+    </main>
+
+    <!-- Audio elements -->
+    <div class="audio-container" aria-hidden="true">
+        <audio id="bgMusic" preload="auto" loop>
+            <source src="audio/background_music.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="jumpSound" preload="auto">
+            <source src="audio/jump.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="deathSound" preload="auto">
+            <source src="audio/death.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="completeSound" preload="auto">
+            <source src="audio/level_complete.mp3" type="audio/mpeg">
+        </audio>
     </div>
 
-    <div class="challenge-modal" id="challengeModal">
-        <h2 class="challenge-title" id="challengeTitle"></h2>
-        <p class="challenge-description" id="challengeDescription"></p>
-        <button class="challenge-button" id="challengeButton">Got it!</button>
+    <!-- Keyboard shortcut help (hidden initially) -->
+    <div id="keyboardHelp" class="keyboard-help" style="display: none;">
+        <h3>Keyboard Shortcuts</h3>
+        <ul>
+            <li><kbd>Arrow Keys</kbd>: Move player</li>
+            <li><kbd>Space</kbd> or <kbd>↑</kbd>: Jump</li>
+            <li><kbd>Esc</kbd>: Pause/Resume</li>
+            <li><kbd>R</kbd>: Restart level</li>
+        </ul>
     </div>
 
-    <script>
-        // Game data
-        const challenges = [
-            { text: "Take 6 Sips", color: "#ff6b6b", action: "sips", amount: 2 },
-            { text: "Everyone Drinks!", color: "#4ecdc4", action: "everyone" },
-            { text: "Choose Someone", color: "#a8e6cf", action: "choose" },
-            { text: "Take 3 Sips", color: "#ffd93d", action: "sips", amount: 3 },
-            { text: "Finish the drink", color: "#6c5ce7", action: "rule" },
-            { text: "Finish the drink", color: "#ff7979", action: "truthOrDare" },
-        ];
+    <!-- Load constants first as a standard script (not module) -->
+    <script src="js/constants.js"></script>
 
-        const beerFacts = [
-            "The oldest known recipe is for beer!",
-            "Beer is the third most popular drink after water and tea.",
-            "The strongest beer in the world has 67.5% alcohol content!",
-            "In Ancient Egypt, workers were paid in beer.",
-            "There's a beer brewed from bananas in Africa.",
-            "The fear of an empty beer glass is called Cenosillicaphobia!"
-        ];
+    <!-- Load non-module scripts -->
+    <script src="js/player.js"></script>
+    <script src="js/renderer.js"></script>
 
-        const categories = [
-            "Types of beer",
-            "Countries in Europe",
-            "Pizza toppings",
-            "Superheroes",
-            "Car brands",
-            "Movie genres"
-        ];
+    <!-- Load module scripts -->
+    <script src="js/default_levels.js" type="module"></script>
+    <script src="js/audio.js" type="module"></script>
+    <script src="js/levels.js" type="module"></script>
+    <script src="js/ui.js" type="module"></script>
+    <script src="js/game.js" type="module"></script>
 
-        let players = [];
-        let currentPlayerIndex = 0;
-        let spinAngle = 0;
-        let isSpinning = false;
-
-        // Initialize wheel
-        function initWheel() {
-            const wheel = document.getElementById('wheel');
-            const segmentAngle = 360 / challenges.length;
-
-            challenges.forEach((challenge, index) => {
-                const segment = document.createElement('div');
-                segment.className = 'wheel-segment';
-                segment.style.background = challenge.color;
-                segment.style.transform = `rotate(${index * segmentAngle}deg) skew(${90 - segmentAngle}deg)`;
-                segment.innerHTML = `<span style="transform: skew(${segmentAngle - 90}deg) rotate(${segmentAngle / 2}deg)">${challenge.text}</span>`;
-                wheel.appendChild(segment);
-            });
-        }
-
-        // Create floating bubbles
-        function createBubbles() {
-            for (let i = 0; i < 20; i++) {
-                const bubble = document.createElement('div');
-                bubble.className = 'bubble';
-                const size = Math.random() * 60 + 20;
-                bubble.style.width = size + 'px';
-                bubble.style.height = size + 'px';
-                bubble.style.left = Math.random() * 100 + '%';
-                bubble.style.animationDelay = Math.random() * 10 + 's';
-                bubble.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                document.body.appendChild(bubble);
-            }
-        }
-
-        // Add player
-        function addPlayer() {
-            const input = document.getElementById('playerName');
-            const name = input.value.trim();
-
-            if (name && players.length < 10) {
-                players.push(name);
-                input.value = '';
-                updatePlayersList();
-            }
-        }
-
-        // Update players display
-        function updatePlayersList() {
-            const list = document.getElementById('playersList');
-            list.innerHTML = '';
-
-            players.forEach((player, index) => {
-                const chip = document.createElement('div');
-                chip.className = 'player-chip';
-                if (index === currentPlayerIndex) {
-                    chip.classList.add('current-player');
-                }
-                chip.textContent = player;
-                list.appendChild(chip);
-            });
-        }
-
-        // Spin the wheel
-        function spin() {
-            if (isSpinning || players.length === 0) {
-                if (players.length === 0) {
-                    alert('Add at least one player first!');
-                }
-                return;
-            }
-
-            isSpinning = true;
-            const spins = Math.floor(Math.random() * 5) + 5;
-            const randomAngle = Math.random() * 360;
-            spinAngle += (spins * 360) + randomAngle;
-
-            document.getElementById('wheel').style.transform = `rotate(${spinAngle}deg)`;
-
-            setTimeout(() => {
-                const normalizedAngle = spinAngle % 360;
-                const segmentAngle = 360 / challenges.length;
-                const winningIndex = Math.floor((360 - normalizedAngle) / segmentAngle) % challenges.length;
-                const challenge = challenges[winningIndex];
-
-                showChallenge(challenge);
-                isSpinning = false;
-            }, 3000);
-        }
-
-        // Show challenge modal
-        function showChallenge(challenge) {
-            const modal = document.getElementById('challengeModal');
-            const title = document.getElementById('challengeTitle');
-            const description = document.getElementById('challengeDescription');
-            const currentPlayer = players[currentPlayerIndex];
-
-            title.textContent = challenge.text;
-
-            switch(challenge.action) {
-                case 'sips':
-                    description.textContent = `${currentPlayer}, take ${challenge.amount} sip${challenge.amount > 1 ? 's' : ''} of your beer!`;
-                    break;
-                case 'everyone':
-                    description.textContent = 'Everyone takes a sip! Cheers! 🍻';
-                    break;
-                case 'choose':
-                    description.textContent = `${currentPlayer}, choose someone to take 2 sips!`;
-                    break;
-                case 'rule':
-                    description.textContent = `${currentPlayer}, make a new rule! Anyone who breaks it drinks!`;
-                    break;
-                case 'truthOrDare':
-                    description.textContent = `${currentPlayer}, truth or dare? If you refuse, take 3 sips!`;
-                    break;
-                case 'reaction':
-                    description.textContent = `${currentPlayer}, get ready for a reaction test!`;
-                    setTimeout(() => {
-                        modal.classList.remove('show');
-                        startReactionGame();
-                    }, 2000);
-                    modal.classList.add('show');
-                    return;
-                case 'categories':
-                    const category = categories[Math.floor(Math.random() * categories.length)];
-                    description.textContent = `${currentPlayer} starts! Name things in: "${category}". First to repeat or hesitate drinks!`;
-                    break;
-                case 'neverHaveI':
-                    description.textContent = `${currentPlayer}, say "Never have I ever..." Everyone who has done it drinks!`;
-                    break;
-                case 'reverse':
-                    description.textContent = 'Play order reversed! 🔄';
-                    players.reverse();
-                    currentPlayerIndex = players.length - 1 - currentPlayerIndex;
-                    break;
-                case 'beerFact':
-                    const fact = beerFacts[Math.floor(Math.random() * beerFacts.length)];
-                    description.textContent = `Fun fact: ${fact} Everyone drinks to knowledge! 🍺`;
-                    break;
-            }
-
-            modal.classList.add('show');
-        }
-
-        // Start reaction game
-        function startReactionGame() {
-            const game = document.getElementById('reactionGame');
-            const button = document.getElementById('reactionBtn');
-            const result = document.getElementById('reactionResult');
-
-            game.style.display = 'block';
-            button.textContent = 'Wait...';
-            button.className = 'reaction-button';
-            button.disabled = false;
-            result.textContent = '';
-
-            const delay = Math.random() * 4000 + 1000;
-            let startTime;
-            let clicked = false;
-
-            button.onclick = () => {
-                if (!button.classList.contains('ready')) {
-                    result.textContent = 'Too early! Take 3 sips! 🍺🍺🍺';
-                    button.disabled = true;
-                    clicked = true;
-                    setTimeout(() => {
-                        game.style.display = 'none';
-                        nextPlayer();
-                    }, 3000);
-                } else if (!clicked) {
-                    const reactionTime = Date.now() - startTime;
-                    if (reactionTime < 300) {
-                        result.textContent = `Amazing! ${reactionTime}ms - Everyone else drinks!`;
-                    } else if (reactionTime < 500) {
-                        result.textContent = `Good! ${reactionTime}ms - You're safe!`;
-                    } else {
-                        result.textContent = `Slow! ${reactionTime}ms - Take 2 sips!`;
-                    }
-                    button.disabled = true;
-                    clicked = true;
-                    setTimeout(() => {
-                        game.style.display = 'none';
-                        nextPlayer();
-                    }, 3000);
-                }
-            };
-
-            setTimeout(() => {
-                if (!clicked) {
-                    button.textContent = 'CLICK!';
-                    button.classList.add('ready');
-                    startTime = Date.now();
-
-                    setTimeout(() => {
-                        if (!clicked) {
-                            result.textContent = 'Too slow! Take 3 sips!';
-                            button.disabled = true;
-                            setTimeout(() => {
-                                game.style.display = 'none';
-                                nextPlayer();
-                            }, 3000);
-                        }
-                    }, 2000);
-                }
-            }, delay);
-        }
-
-        // Move to next player
-        function nextPlayer() {
-            currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-            updatePlayersList();
-        }
-
-        // Event listeners
-        document.getElementById('spinBtn').addEventListener('click', spin);
-        document.getElementById('addPlayerBtn').addEventListener('click', addPlayer);
-        document.getElementById('playerName').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') addPlayer();
-        });
-        document.getElementById('challengeButton').addEventListener('click', () => {
-            document.getElementById('challengeModal').classList.remove('show');
-            nextPlayer();
-        });
-
-        // Initialize game
-        initWheel();
-        createBubbles();
-    </script>
+    <!-- Load main entry point last -->
+    <script src="js/app.js" type="module"></script>
 </body>
 </html>
