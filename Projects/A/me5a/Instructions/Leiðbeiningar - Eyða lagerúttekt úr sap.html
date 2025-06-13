@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAP Kerfi - Hvernig á að eyða lagerúttekt</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            min-height: 100vh;
+            color: #000;
+            padding: 20px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background: #003366;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: normal;
+        }
+
+        .progress-indicator {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .progress-step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #516f8a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active {
+            background: #4a9eff;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed {
+            background: #4caf50;
+        }
+
+        .content-area {
+            display: flex;
+            min-height: 600px;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: #f7f7f7;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .step-info {
+            background: #e8f4ff;
+            border: 1px solid #b3d9ff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .step-info h2 {
+            font-size: 20px;
+            color: #003366;
+            margin-bottom: 10px;
+        }
+
+        .sap-window {
+            background: #e6e6e6;
+            border: 2px solid #999;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            margin: 20px 0;
+        }
+
+        .sap-titlebar {
+            background: linear-gradient(to bottom, #4a7bb7, #2e5490);
+            color: white;
+            padding: 5px 10px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sap-menu {
+            background: #f0f0f0;
+            border-bottom: 1px solid #999;
+            padding: 2px;
+            display: flex;
+            gap: 10px;
+            font-size: 12px;
+        }
+
+        .sap-menu-item {
+            padding: 4px 10px;
+            cursor: pointer;
+        }
+
+        .sap-menu-item:hover {
+            background: #e0e0e0;
+        }
+
+        .sap-toolbar {
+            background: #d4d0c8;
+            border-bottom: 1px solid #999;
+            padding: 5px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .sap-button {
+            background: #e0e0e0;
+            border: 1px solid #999;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .sap-button:hover {
+            background: #f0f0f0;
+        }
+
+        .sap-content {
+            padding: 15px;
+            background: #fff;
+        }
+
+        .sap-field-group {
+            margin-bottom: 15px;
+        }
+
+        .sap-field-label {
+            display: inline-block;
+            width: 150px;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .sap-input {
+            border: 1px solid #7c7c7c;
+            padding: 3px 5px;
+            font-size: 13px;
+            background: #fff;
+            width: 200px;
+        }
+
+        .sap-input:focus {
+            outline: 2px solid #0066cc;
+            outline-offset: -1px;
+        }
+
+        .sap-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .sap-table th {
+            background: #c0c0c0;
+            border: 1px solid #999;
+            padding: 4px 8px;
+            text-align: left;
+            font-weight: normal;
+        }
+
+        .sap-table td {
+            border: 1px solid #ccc;
+            padding: 4px 8px;
+            background: #fff;
+        }
+
+        .sap-table tr:hover td {
+            background: #e8f4ff;
+        }
+
+        .clickable-area {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .click-indicator {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 3px solid #ff4444;
+            border-radius: 50%;
+            background: rgba(255, 68, 68, 0.1);
+            animation: pulse 2s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(0.9); opacity: 1; }
+        }
+
+        .arrow-indicator {
+            position: absolute;
+            color: #ff4444;
+            font-size: 24px;
+            font-weight: bold;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        .nav-button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: #0052a3;
+        }
+
+        .nav-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border: 1px solid #17a2b8;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .step-container {
+            display: none;
+        }
+
+        .step-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .checkbox-sap {
+            width: 13px;
+            height: 13px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        .highlight-field {
+            background: #ffff99 !important;
+            animation: highlight 1s ease;
+        }
+
+        @keyframes highlight {
+            0% { background: #ffff99; }
+            100% { background: #fff; }
+        }
+
+        .instruction-list {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #0066cc;
+        }
+
+        .instruction-list li {
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .content-area {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header">
+            <h1>SAP Kerfi - Leiðbeiningar: Að eyða lager úttekt</h1>
+            <div class="progress-indicator">
+                <div class="progress-step" id="prog0">✓</div>
+                <div class="progress-step" id="prog1">1</div>
+                <div class="progress-step" id="prog2">2</div>
+                <div class="progress-step" id="prog3">3</div>
+                <div class="progress-step" id="prog4">4</div>
+                <div class="progress-step" id="prog5">5</div>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <div class="sidebar">
+                <h3 style="margin-bottom: 20px;">Yfirlit</h3>
+                <div class="instruction-list">
+                    <strong>Tilgangur:</strong>
+                    <p style="margin: 10px 0; font-size: 13px;">Eyða beiðnum úr SAP kerfinu sem eiga ekki lengur við.</p>
+
+                    <div class="warning-box" style="margin-top: 20px;">
+                        <strong>⚠️ Athugið:</strong><br>
+                        Ekki er hægt að eyða lager úttekt þegar úttekt hefur verið <strong>keypt út á verkbeiðni</strong>.
+                    </div>
+                </div>
+
+                <h4 style="margin-top: 30px; margin-bottom: 15px;">Skref:</h4>
+                <ol style="font-size: 13px; line-height: 1.8;">
+                    <li>Opna MD04 gluggann</li>
+                    <li>Slá inn vörunúmer</li>
+                    <li>Tvísmella á beiðni</li>
+                    <li>Merkja "Endanleg útg"</li>
+                    <li>Staðfesta / Vista breytingar</li>
+                </ol>
+            </div>
+
+            <div class="main-content">
+                <!-- Step 0: Intro -->
+                <div class="step-container active" id="step0">
+                    <div class="step-info">
+                        <h2>Velkomin í leiðbeiningarnar</h2>
+                        <p>Þessar leiðbeiningar sýna þér skref fyrir skref hvernig á að eyða beiðnum úr SAP kerfinu.</p>
+                    </div>
+
+                    <div style="text-align: center; padding: 40px 0;">
+                        <h3 style="margin-bottom: 20px;">Hvað þú munt læra:</h3>
+                        <ul style="list-style: none; text-align: left; display: inline-block; font-size: 16px; line-height: 2;">
+                            <li>✓ Hvernig á að finna beiðnir í MD04</li>
+                            <li>✓ Hvernig á að opna beiðni til breytinga</li>
+                            <li>✓ Hvernig á að merkja beiðni sem "Endanleg útg"</li>
+                            <li>✓ Hvernig á að staðfesta að beiðni hafi verið eytt</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>Tími:</strong> Um 5 mínútur<br>
+                        <strong>Kunnátta:</strong> Grunnþekking á SAP
+                    </div>
+                </div>
+
+                <!-- Step 1: Open MD04 -->
+                <div class="step-container" id="step1">
+                    <div class="step-info">
+                        <h2>Skref 1: Opna MD04 gluggann</h2>
+                        <p>Byrjum á að opna MD04 gluggann, þar getum skoðað núverandi birgðastöðu og til dæmis beiðnir á vörunni.</p>
+                    </div>
+
+                    <div class="sap-window">
+                        <div class="sap-titlebar">
+                            <span>SAP Easy Access</span>
+                        </div>
+                        <div class="sap-menu">
+                            <span class="sap-menu-item">Menu</span>
+                            <span class="sap-menu-item">Edit</span>
+                            <span class="sap-menu-item">Favorites</span>
+                            <span class="sap-menu-item">Extras</span>
+                            <span class="sap-menu-item">System</span>
+                        </div>
+                        <div class="sap-toolbar">
+                            <div class="sap-button">
+                                <span>↵</span>
+                            </div>
+                            <input type="text" class="sap-input" id="commandField" placeholder="Command field" style="margin-left: 10px; width: 300px;">
+                        </div>
+                        <div class="sap-content">
+                            <p style="font-size: 13px; margin-bottom: 10px;">Sláðu inn <strong>MD04</strong> í skipanasvæðið og ýttu á Enter:</p>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>Ábending:</strong> Ef þú ert þegar í öðrum glugga, sláðu inn <strong>/nmd04</strong> til að fara beint í MD04.
+                    </div>
+
+                    <button class="nav-button" onclick="checkCommand()" style="margin-top: 20px;">Athuga skipun</button>
+                </div>
+
+                <!-- Step 2: Enter Material Number -->
+                <div class="step-container" id="step2">
+                    <div class="step-info">
+                        <h2>Skref 2: Skoða beiðnir á vöru</h2>
+                        <p>Nú þurfum við að slá inn vörunúmerið til að sjá beiðnirnar.</p>
+                    </div>
+
+                    <div class="sap-window">
+                        <div class="sap-titlebar">
+                            <span>Stock/Requirements List</span>
+                        </div>
+                        <div class="sap-content">
+                            <div class="sap-field-group">
+                                <label class="sap-field-label">Material</label>
+                                <input type="text" class="sap-input" id="materialInput" value="41445059">
+                                <span style="font-size: 12px; color: #666; margin-left: 10px;">← Varan 41445059 hefur verið Slegin inn í skipanasvæðið, ýttu á Enter</span>
+                            </div>
+                            <div class="sap-field-group">
+                                <label class="sap-field-label">Plant</label>
+                                <input type="text" class="sap-input" value="2900" readonly style="background: #f0f0f0;">
+                            </div>
+                            <div class="sap-field-group">
+                                <label class="sap-field-label">MRP area</label>
+                                <input type="text" class="sap-input" readonly style="background: #f0f0f0;">
+                                <span style="font-size: 12px; color: #666; margin-left: 10px;">← Ekki þarf að fylla út</span>
+                            </div>
+
+                            <div id="materialList" style="display: none; margin-top: 20px;">
+                                <div style="background: #f0f0f0; padding: 5px; font-size: 12px; border-bottom: 1px solid #999;">
+                                    ÁL HANDSPENNIR F-430
+                                </div>
+                                <table class="sap-table" style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 20px;">V..</th>
+                                            <th style="width: 80px;">Dagsetning</th>
+                                            <th style="width: 80px;">Vöru...</th>
+                                            <th style="width: 100px;">Vörustj.gögn</th>
+                                            <th style="width: 120px;">Enduráætlun.</th>
+                                            <th style="width: 80px;">U...</th>
+                                            <th style="width: 80px;">Receipt/krafa/þörf</th>
+                                            <th style="width: 80px;">Tiltækkt magn</th>
+                                            <th style="width: 10px;">La...</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" style="width: 10px; height: 10px;"></td>
+                                            <td style="font-size: 11px;">08.05.2025</td>
+                                            <td style="font-size: 11px;">Stock</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td style="text-align: right;">0</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="clickable-area" onclick="selectMaterialRow()" id="materialRow" style="background: #fff;">
+                                            <td><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" style="width: 10px; height: 10px;"></td>
+                                            <td style="font-size: 11px;">25.05.2025</td>
+                                            <td style="font-size: 11px;">MTRes</td>
+                                            <td style="font-size: 11px;">0262462624/0001</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td style="text-align: right; font-size: 11px;">1,000</td>
+                                            <td style="text-align: right; font-size: 11px;">1,000</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="arrow-indicator" style="position: absolute; top: 450px; left: 880px; color: #d946ef; font-size: 30px;">⤹</div>
+                                <p style="font-size: 12px; color: #666; margin-top: 10px;">Tvísmelltu á MTRes línuna til að opna viðbótarupplýsingar</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Open Additional Data -->
+                <div class="step-container" id="step3">
+                    <div class="step-info">
+                        <h2>Skref 3: Opna viðbótarupplýsingar</h2>
+                        <p>Tvísmelltu á beiðnina til að opna viðbótarupplýsingar.</p>
+                    </div>
+
+                    <div class="sap-window">
+                        <div class="sap-titlebar">
+                            <span>Additional Data for MRP Element</span>
+                        </div>
+                        <div class="sap-content">
+                            <div class="sap-field-group">
+                                <label class="sap-field-label">Frátekt nr.</label>
+                                <input type="text" class="sap-input" value="262952926" readonly style="width: 70px; background: #f0f0f0;">
+                                <input type="text" class="sap-input" value="0001" readonly style="width: 40px; background: #f0f0f0;">
+                                <input type="checkbox" checked disabled style="margin-left: 20px; vertical-align: middle;">
+                                <span style="font-size: 12px; color: #666;">Mvt Allowed</span>
+                            </div>
+                            <div class="sap-field-group">
+                                <label class="sap-field-label">Requirement Qty</label>
+                                <input type="text" class="sap-input" value="1,000" readonly style="width: 100px; background: #f0f0f0;">
+                                <span style="margin-left: 0px; font-size: 13px; border: 1px solid #999; padding: 2px 5px; background: #f0f0f0;">EA</span>
+                                <span style="margin-left: 30px; font-size: 13px;">Umb.afhend</span>
+                                <input type="text" class="sap-input" value="08.05.2025" readonly style="width: 100px; margin-left: 10px; background: #f0f0f0;">
+                                <span style="margin-left: 0px; font-size: 13px;">Busn. Area</span>
+                                <input type="text" class="sap-input" value="1,000" readonly style="width: 60px; background: #f0f0f0;">
+                            </div>
+                            <div class="sap-field-group">
+                                <label class="sap-field-label">Quantity in UnE</label>
+                                <input type="text" class="sap-input" value="1,000" readonly style="width: 100px; background: #f0f0f0;">
+                                <span style="margin-left: 0px; font-size: 13px; border: 1px solid #999; padding: 2px 5px; background: #f0f0f0;">EA</span>
+                                <span style="margin-left: 30px; font-size: 13px;">G/L Acct</span>
+                                <input type="text" class="sap-input" value="404200" readonly style="width: 100px; margin-left: 30px; background: #f0f0f0;">
+                                <span style="margin-left: 0px; font-size: 13px;">Stor. Loc.</span>
+                                <input type="text" class="sap-input" value="0001" readonly style="width: 60px; margin-left: 10px; background: #f0f0f0;">
+                            </div>
+
+                            <div style="margin-top: 20px; padding-top: 10px; border-top: 1px solid #ccc; text-align: right;">
+                                <div style="background: #f0f0f0; padding: 5px; display: inline-flex; gap: 2px; border: 1px solid #999;">
+                                    <button class="sap-button" style="padding: 2px 5px; min-width: 30px;">
+                                        <span style="color: green;">✓</span>
+                                    </button>
+                                    <button class="sap-button" style="padding: 2px 5px; min-width: 30px;">
+                                        <span>🔍</span>
+                                    </button>
+                                    <button class="sap-button clickable-area" onclick="openChangeMode()" style="padding: 2px 5px; min-width: 30px; position: relative;">
+                                        <span>✏️</span>
+                                        <div class="click-indicator" style="top: -10px; left: -5px;"></div>
+                                    </button>
+                                    <button class="sap-button" style="padding: 2px 5px; min-width: 30px;">
+                                        <span>📋</span>
+                                    </button>
+                                    <button class="sap-button" style="padding: 2px 5px; min-width: 30px;">
+                                        <span style="color: orange;">⭐</span>
+                                    </button>
+                                    <button class="sap-button" style="padding: 2px 5px; min-width: 30px;">
+                                        <span style="color: red;">✕</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        Smelltu á <strong>✏️ Change</strong> hnappinn til að breyta beiðninni.
+                    </div>
+                </div>
+
+
+               <!-- Step 4: Mark for Deletion -->
+                <div class="step-container" id="step4">
+                    <div class="step-info">
+                        <h2>Skref 4: Eyða beiðninni</h2>
+                        <p>Merktu við "Endanleg útg" (Final issue) til að eyða beiðninni.</p>
+                    </div>
+
+                    <div class="sap-window">
+                        <div class="sap-titlebar">
+                            <span>Change Reservation 0262952926 : Details 0001 / 0001</span>
+                        </div>
+                        <div class="sap-toolbar">
+                            <div class="sap-button">
+                                <span>◀</span>
+                            </div>
+                            <div class="sap-button">
+                                <span>▶</span>
+                            </div>
+                            <div class="sap-button">
+                                <span>Ný vara</span>
+                            </div>
+                        </div>
+                        <div class="sap-content">
+                            <div style="background: #d6e5f0; border: 1px solid #9bb8d3; padding: 10px; margin-bottom: 10px;">
+                                <div style="display: grid; grid-template-columns: auto auto 1fr; gap: 5px 40px; font-size: 12px; align-items: center;">
+                                    <label style="display: block; margin-bottom: 2px;">Hreyfingartegund</label>
+                                    <div style="display: flex; align-items: center;">
+                                        <input type="text" class="sap-input" value="201" readonly style="width: 100px; background: #f0f0f0;">
+                                    </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <label style="margin-right: 10px;">Vörufrátekt kost st</label>
+                                        <span>RTA - ISAL</span>
+                                    </div>
+
+                                    <label style="display: block; margin-bottom: 2px;">Verksmiðja</label>
+                                    <div style="display: flex; align-items: center;">
+                                        <input type="text" class="sap-input" value="2900" readonly style="width: 100px; background: #f0f0f0;">
+                                    </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <span>RTA - ISAL</span>
+                                    </div>
+
+                                    <label style="display: block; margin-bottom: 2px;">Vörur</label>
+                                    <div style="display: flex; align-items: center;">
+                                        <input type="text" class="sap-input" value="41445059" readonly style="width: 100px; background: #f0f0f0;">
+                                    </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <span>ÁL HANDSPENNIR F-430</span>
+                                    </div>
+
+                                    <label style="display: block; margin-bottom: 2px;">Lager</label>
+                                    <div style="display: flex; align-items: center;">
+                                        <input type="text" class="sap-input" value="0001" readonly style="width: 100px; background: #f0f0f0;">
+                                        <span style="margin-left: 5px;">Main Warehouse</span>
+                                    </div>
+                                    <div></div>
+                                </div>
+                            </div>
+
+                            <div style="background: #d6e5f0; border: 1px solid #9bb8d3; padding: 10px; margin-bottom: 10px;">
+                                <div style="font-weight: bold; font-size: 12px; margin-bottom: 8px;">Magn</div>
+                                <div style="display: grid; grid-template-columns: 120px 100px 30px 1fr; gap: 10px; font-size: 12px;">
+                                    <label>Ein</label>
+                                    <input type="text" class="sap-input" value="1,000" readonly style="width: 100px; background: #f0f0f0;">
+                                    <span style="margin-left: 0px; font-size: 13px; border: 1px solid #999; padding: 2px 5px; background: #f0f0f0;">EA</span>
+                                    <div style="display: flex; align-items: center; padding-left: 85px;">
+                                        <input type="checkbox" style="margin-right: 5px;"> Magn er fast
+                                    </div>
+                                    <label>Birgðir eftir</label>
+                                    <input type="text" class="sap-input" value="1,000" readonly style="width: 100px; background: #f0f0f0;">
+                                    <span style="margin-left: 0px; font-size: 13px; border: 1px solid #999; padding: 2px 5px; background: #f0f0f0;">EA</span>
+                                    <div></div>
+                                </div>
+                            </div>
+
+                            <div style="background: #d6e5f0; border: 1px solid #9bb8d3; padding: 10px;">
+                                <div style="font-weight: bold; font-size: 12px; margin-bottom: 8px;">Frátekt upplýsingar</div>
+                                <div style="display: grid; grid-template-columns: 120px 235px 100px 1fr; gap: 8px; font-size: 12px;">
+                                    <label>Umb.afhendingar</label>
+                                    <input type="text" class="sap-input" value="08.05.2025" readonly style="width: 100px; background: #f0f0f0;">
+                                    <div style="grid-column: span 2; display: flex; align-items: center; position: relative;">
+                                        <input type="checkbox" id="finalIssue" style="margin-right: 5px; cursor: pointer;" onchange="toggleFinalIssue()">
+                                        <label for="finalIssue" style="cursor: pointer; font-weight: bold; color: #c00;">Endanleg útg.</label>
+                                        <div class="click-indicator" style="top: -10px; left: -13px;"></div>
+                                    </div>
+                                    <label>☑ Mvt Allowed</label>
+                                    <div style="grid-column: span 3; display: flex; align-items: center;">
+                                        <input type="checkbox" style="margin-right: 5px;"> Búið að eyða
+                                    </div>
+                                    <label>Kostnaðarstaður</label>
+                                    <input type="text" class="sap-input" value="29000580" readonly style="width: 100px; background: #f0f0f0;">
+                                    <span style="margin-left: -140px; margin-top: 5px">Birgðageymsla</span>
+                                    <div></div>
+                                    <label>Bókhaldslykill</label>
+                                    <input type="text" class="sap-input" value="404200" readonly style="width: 100px; background: #f0f0f0;">
+                                    <div style="grid-column: span 2;"></div>
+                                    <label>Móttakandi</label>
+                                    <input type="text" class="sap-input" value="LAGER" readonly style="width: 100px; background: #f0f0f0;">
+                                    <label style="text-align: right;">Afh.staður</label>
+                                    <input type="text" class="sap-input" value="ÞEGAR AFGREITT" readonly style="width: 280px; background: #f0f0f0;">
+                                    <label>Texti</label>
+                                    <input type="text" class="sap-input" style="width: 280px; grid-column: span 3;">
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 20px; text-align: right;">
+                                <button class="sap-button" onclick="saveReservation()" id="saveBtn" disabled style="padding: 8px 20px; background: #ccc; color: #666; cursor: not-allowed;">
+                                    <span>💾 Vista</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>Ábending:</strong> Hakaðu við <strong>"Endanleg útg."</strong> til að fjarlægja beiðnina. Þegar þú hefur hakað við vistaru.
+                    </div>
+                </div>
+
+
+                 <!-- Step 5: Confirm Deletion -->
+                <div class="step-container" id="step5">
+                    <div class="step-info">
+                        <h2>Skref 5: Beiðni Eydd</h2>
+                        <p>Nú erum við aftur í MD04 og sjáum að beiðnin hefur verið fjarlægð.</p>
+                    </div>
+
+                    <div class="sap-window">
+                        <div class="sap-titlebar">
+                            <span>Stock/Requirements List</span>
+                        </div>
+                        <div class="sap-content">
+                            <div class="sap-field-group">
+                                <label class="sap-field-label">Material</label>
+                                <input type="text" class="sap-input" value="41445059" readonly style="background: #f0f0f0;">
+                            </div>
+                            <div class="sap-field-group">
+                                <label class="sap-field-label">Plant</label>
+                                <input type="text" class="sap-input" value="2900" readonly style="background: #f0f0f0;">
+                            </div>
+                            <div class="sap-field-group">
+                                <label class="sap-field-label">MRP area</label>
+                                <input type="text" class="sap-input" readonly style="background: #f0f0f0;">
+                            </div>
+
+                            <div style="margin-top: 20px;">
+                                <div style="background: #f0f0f0; padding: 5px; font-size: 12px; border-bottom: 1px solid #999;">
+                                    ÁL HANDSPENNIR F-430
+                                </div>
+                                <table class="sap-table" style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 20px;">V..</th>
+                                            <th style="width: 80px;">Dagsetning</th>
+                                            <th style="width: 80px;">Vöru...</th>
+                                            <th style="width: 100px;">Vörustj.gögn</th>
+                                            <th style="width: 120px;">Enduráætlun.</th>
+                                            <th style="width: 80px;">U...</th>
+                                            <th style="width: 80px;">Receipt/krafa/þörf</th>
+                                            <th style="width: 80px;">Tiltækkt magn</th>
+                                            <th style="width: 10px;">La...</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" style="width: 10px; height: 10px;"></td>
+                                            <td style="font-size: 11px;">08.05.2025</td>
+                                            <td style="font-size: 11px;">Stock</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td style="text-align: right;">0</td>
+                                            <td></td>
+                                        </tr>
+                                        <!-- MTRES row has been removed - deletion successful! -->
+                                    </tbody>
+                                </table>
+
+                                <div style="margin-top: 20px; padding: 15px; background: #d4edda; border: 1px solid #c3e6cb; text-align: center;">
+                                    <h3 style="color: #155724; margin-bottom: 10px;">✓ Aðgerð tókst!</h3>
+                                    <p style="color: #155724;">MTRes beiðnin hefur verið eytt úr kerfinu.</p>
+                                    <p style="color: #666; font-size: 12px; margin-top: 10px;">Aðeins Stock línan sést enn - beiðnin 0262462624/0001 er horfin</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>Vel gert!</strong> Þú hefur nú eytt beiðni úr SAP kerfinu. <br>
+                        <br>
+                        Til að kanna hvort hafi gengið upp farðu í MD04 og settu inn lagernúmerið, ýttu á  <strong>F6</strong> til að endurhlaða gluggann. <br>
+                        Þá ætti viðkomandi frátekt að vera horfin.
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="nav-button" onclick="previousStep()" id="prevBtn">← Fyrra skref</button>
+                    <button class="nav-button" onclick="nextStep()" id="nextBtn">Næsta skref →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        const totalSteps = 6;
+
+        function updateProgress() {
+            for (let i = 0; i < totalSteps; i++) {
+                const progStep = document.getElementById('prog' + i);
+                if (i < currentStep) {
+                    progStep.classList.add('completed');
+                    progStep.classList.remove('active');
+                    if (i > 0) progStep.textContent = '✓';
+                } else if (i === currentStep) {
+                    progStep.classList.add('active');
+                    progStep.classList.remove('completed');
+                } else {
+                    progStep.classList.remove('active', 'completed');
+                }
+            }
+        }
+
+        function showStep(step) {
+            document.querySelectorAll('.step-container').forEach(container => {
+                container.classList.remove('active');
+            });
+
+            document.getElementById('step' + step).classList.add('active');
+
+            // Update navigation
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            prevBtn.style.display = step === 0 ? 'none' : 'block';
+
+            if (step === totalSteps - 1) {
+                nextBtn.textContent = 'Byrja aftur';
+                nextBtn.onclick = () => { currentStep = 0; showStep(0); };
+            } else {
+                nextBtn.textContent = 'Næsta skref →';
+                nextBtn.onclick = nextStep;
+            }
+
+            updateProgress();
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps - 1) {
+                currentStep++;
+                showStep(currentStep);
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                showStep(currentStep);
+                window.scrollTo(0, 0);
+            }
+        }
+
+        // Interactive functions for Step 1
+        function checkCommand() {
+            const input = document.getElementById('commandField');
+            if (input.value.toUpperCase() === 'MD04' || input.value === '/nmd04') {
+                input.classList.add('highlight-field');
+                setTimeout(() => {
+                    alert('Rétt! MD04 glugginn opnast.');
+                    nextStep();
+                }, 500);
+            } else {
+                alert('Sláðu inn MD04 eða /nmd04 í skipanasvæðið.');
+                input.focus();
+            }
+        }
+
+        // Interactive functions for Step 2
+        function showMaterialList() {
+            const materialInput = document.getElementById('materialInput');
+            if (materialInput.value === '41445059') {
+                document.getElementById('materialList').style.display = 'block';
+                materialInput.classList.add('highlight-field');
+
+                // Enable and style the next button
+                const nextBtn = document.getElementById('nextBtn');
+                nextBtn.disabled = false;
+                nextBtn.style.background = '#0066cc';
+                nextBtn.style.cursor = 'pointer';
+            } else {
+                alert('Sláðu inn vörunúmer 41445059 fyrir þetta dæmi.');
+            }
+        }
+
+        function selectMaterialRow() {
+            const row = document.getElementById('materialRow');
+            row.style.background = '#b3d9ff';
+            setTimeout(() => {
+                alert('Beiðni valin! Nú opnast viðbótarupplýsingar.');
+                nextStep();
+            }, 300);
+        }
+
+        // Interactive functions for Step 3
+        function openChangeMode() {
+            alert('Breytingagluggi opnast.');
+            nextStep();
+        }
+
+        // Interactive functions for Step 4 - FIXED VERSION
+        function toggleFinalIssue() {
+            const checkbox = document.getElementById('finalIssue');
+            const saveBtn = document.getElementById('saveBtn');
+
+            // Don't manually toggle - the checkbox state is already handled by the browser
+            // Just check the current state and update the save button accordingly
+            if (checkbox.checked) {
+                // Enable save button
+                saveBtn.disabled = false;
+                saveBtn.style.background = '#0066cc';
+                saveBtn.style.color = 'white';
+                saveBtn.style.cursor = 'pointer';
+
+                // Add highlight effect
+                checkbox.parentElement.classList.add('highlight-field');
+
+                // Remove highlight after animation
+                setTimeout(() => {
+                    checkbox.parentElement.classList.remove('highlight-field');
+                }, 1000);
+            } else {
+                // Disable save button
+                saveBtn.disabled = true;
+                saveBtn.style.background = '#ccc';
+                saveBtn.style.color = '#666';
+                saveBtn.style.cursor = 'not-allowed';
+            }
+        }
+
+        function saveReservation() {
+            if (confirm('Nú hefur beiðni verið fjarlægð')) {
+                nextStep();
+            }
+        }
+
+        // Add Enter key listeners for Step 1 and Step 2
+        document.addEventListener('DOMContentLoaded', function() {
+            // Step 1 - Command field Enter key
+            const commandField = document.getElementById('commandField');
+            if (commandField) {
+                commandField.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        checkCommand();
+                    }
+                });
+            }
+
+            // Step 2 - Material input Enter key
+            const materialInput = document.getElementById('materialInput');
+            if (materialInput) {
+                materialInput.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        showMaterialList();
+                    }
+                });
+            }
+        });
+
+        // Initialize
+        showStep(0);
+    </script>
+</body>
+</html>

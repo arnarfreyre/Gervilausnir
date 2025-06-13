@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="is" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAP Kerfi - Hvernig á að útbúa tilkynningu</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="sap-main-container">
+        <div class="sap-header">
+            <h1>SAP Kerfi - Leiðbeiningar: Að útbúa tilkynningu</h1>
+            <div class="sap-progress-indicator">
+                <div class="sap-progress-step" id="prog0">✓</div>
+                <div class="sap-progress-step" id="prog1">1</div>
+                <div class="sap-progress-step" id="prog2">2</div>
+                <div class="sap-progress-step" id="prog3">3</div>
+                <div class="sap-progress-step" id="prog4">4</div>
+                <div class="sap-progress-step" id="prog5">5</div>
+                <div class="sap-progress-step" id="prog6">6</div>
+            </div>
+        </div>
+
+        <div class="sap-content-area">
+            <div class="sap-sidebar">
+                <h3 style="margin-bottom: 20px;">Yfirlit</h3>
+                <div class="sap-instruction-list">
+                    <strong>Tilgangur:</strong>
+                    <p style="margin: 10px 0; font-size: 13px;">Útbúa tilkynningu í SAP kerfinu.</p>
+
+                    <div class="sap-warning-box" style="margin-top: 20px;">
+                        <strong>⚠️ Athugið:</strong><br>
+                        Þessar leiðbeiningar eiga aðeins við tilkynningar fyrir <strong>lagerinn</strong>.
+                    </div>
+                </div>
+
+                <h4 style="margin-top: 30px; margin-bottom: 15px;">Skref:</h4>
+                <ol style="font-size: 13px; line-height: 1.8;">
+                    <li>Opna IH01 gluggann</li>
+                    <li>Slá inn verksmiðjunúmer</li>
+                    <li>Finna lagerinn í tré</li>
+                    <li>Opna stofna tilkynningu gluggan</li>
+                    <li>Opna object information skjáinn</li>
+                    <li>Skrifa lýsingu á tilkynningu og vista</li>
+                </ol>
+            </div>
+
+            <div class="sap-main-content">
+                <!-- Step 0: Intro -->
+                <div class="sap-step-container active" id="step0">
+                    <div class="sap-step-info">
+                        <h2>Velkomin í leiðbeiningarnar</h2>
+                        <p>Þessar leiðbeiningar sýna þér skref fyrir skref hvernig á að útbúa tilkynningu í SAP kerfinu.</p>
+                    </div>
+
+                    <div style="text-align: center; padding: 40px 0;">
+                        <h3 style="margin-bottom: 20px;">Hvað þú munt læra:</h3>
+                        <ul style="list-style: none; text-align: left; display: inline-block; font-size: 16px; line-height: 2;">
+                            <li>✓ Hvernig á að finna staðsetningu í IH01</li>
+                            <li>✓ Hvernig á að velja rétta staðsetningu í tré</li>
+                            <li>✓ Hvernig á að stofna nýja tilkynningu</li>
+                            <li>✓ Hvernig á að vista tilkynningu í kerfinu</li>
+                        </ul>
+                    </div>
+
+                    <div class="sap-info-box">
+                        <strong>Tími:</strong> Um 5 mínútur<br>
+                        <strong>Kunnátta:</strong> Grunnþekking á SAP
+                    </div>
+                </div>
+
+                <!-- Step 1: Open IH01 -->
+                <div class="sap-step-container" id="step1">
+                    <div class="sap-step-info">
+                        <h2>Skref 1: Opna IH01 gluggann</h2>
+                        <p>Byrjum á að opna IH01 gluggann</p>
+                    </div>
+
+                    <div class="sap-window">
+                        <div class="sap-startmenu">
+                            <span class="sap-startmenu-item">📄</span>
+                            <span class="sap-startmenu-item">Aðgangstré</span>
+                            <span class="sap-startmenu-item">Uppfæra</span>
+                            <span class="sap-startmenu-item">Uppáhalds</span>
+                            <span class="sap-startmenu-item">Viðbætur</span>
+                            <span class="sap-startmenu-item">System</span>
+                            <span class="sap-startmenu-item">Hjálp</span>
+                        </div>
+
+                        <!-- Top toolbar with green check, dropdown and icons -->
+                        <div class="sap-top-toolbar">
+                            <div class="sap-top-left">
+                                <button class="sap-icon1-btn" title="Check">✅</button>
+                                <div class="sap-command-area">
+                                    <div class="command-instruction">
+                                        <input type="text" class="sap-command-field-pulsing" id="commandField" placeholder="Sláið inn IH01">
+                                    </div>
+                                </div>
+                                <button class="sap-icon1-btn" title="Back">⬅</button>
+                                <button class="sap-icon1-btn" title="Save">💾</button>
+                                <button class="sap-icon1-btn" title="Print">🖨️</button>
+                                <button class="sap-icon1-btn" title="Left arrow">⬅️</button>
+                                <button class="sap-icon1-btn" title="Up arrow">⬆️</button>
+                                <button class="sap-icon1-btn" title="Right arrow">➡️</button>
+                                <button class="sap-icon1-btn" title="First page">📄</button>
+                                <button class="sap-icon1-btn" title="Previous page">📄</button>
+                                <button class="sap-icon1-btn" title="Next page">📄</button>
+                                <button class="sap-icon1-btn" title="last page">📄</button>
+                                <button class="sap-icon1-btn" title="Session">📄</button>
+                                <button class="sap-icon1-btn" title="Hjálp">❓</button>
+                                <button class="sap-icon1-btn" title="Info">💻</button>
+                            </div>
+                        </div>
+
+                        <div class="sap-titlebar">
+                            <span> SAP aðgangur</span>
+                        </div>
+
+                        <!-- SAP aðganur Section -->
+                        <div class="sap-easy-access-section">
+                            <!-- Small icon toolbar -->
+                            <div class="sap-small-toolbar">
+                                <button class="sap-icon1-btn" title="Create">📁</button>
+                                <button class="sap-icon1-btn" title="Change">📝</button>
+                                <button class="sap-icon1-btn" title="Star">⭐</button>
+                                <button class="sap-icon1-btn" title="Star">⭐</button>
+                                <button class="sap-icon1-btn" title="Arrow">✏️</button>
+                                <button class="sap-icon1-btn" title="Up">🔺</button>
+                                <button class="sap-icon1-btn" title="Down">🔻</button>
+                            </div>
+
+                            <!-- Favorites Tree -->
+                            <div class="sap-favorites-tree">
+                                <div class="favorites-header">
+                                    <span class="tree-expand" onclick="toggleFavoritesNode(this)">▼</span>
+                                    <span class="tree-icon">📁</span>
+                                    <span class="tree-text">Uppáhalds</span>
+                                </div>
+
+                                <div class="favorites-content">
+                                    <div class="favorites-item">
+                                        <span class="tree-indent"></span>
+                                        <span class="tree-icon">⭐</span>
+                                        <span class="tree-text">ME5A - Purchase Requisitions: List Display</span>
+                                    </div>
+                                    <div class="favorites-item">
+                                        <span class="tree-indent"></span>
+                                        <span class="tree-expand" onclick="toggleFavoritesNode(this)">▶</span>
+                                        <span class="tree-icon">📁</span>
+                                        <span class="tree-text">Brgjar</span>
+                                    </div>
+                                    <div class="favorites-item">
+                                        <span class="tree-indent"></span>
+                                        <span class="tree-expand" onclick="toggleFavoritesNode(this)">▶</span>
+                                        <span class="tree-icon">📁</span>
+                                        <span class="tree-text">Endurþjöntun</span>
+                                    </div>
+                                    <div class="favorites-item">
+                                        <span class="tree-indent"></span>
+                                        <span class="tree-expand" onclick="toggleFavoritesNode(this)">▶</span>
+                                        <span class="tree-icon">📁</span>
+                                        <span class="tree-text">Cockpit</span>
+                                    </div>
+                                    <div class="favorites-item">
+                                        <span class="tree-indent"></span>
+                                        <span class="tree-expand" onclick="toggleFavoritesNode(this)">▶</span>
+                                        <span class="tree-icon">📁</span>
+                                        <span class="tree-text">Lagerstjórn</span>
+                                    </div>
+                                    <div class="favorites-item">
+                                        <span class="tree-indent"></span>
+                                        <span class="tree-expand" onclick="toggleFavoritesNode(this)">▶</span>
+                                        <span class="tree-icon">📁</span>
+                                        <span class="tree-text">Samningar</span>
+                                    </div>
+                                    <div class="favorites-item">
+                                        <span class="tree-indent"></span>
+                                        <span class="tree-expand" onclick="toggleFavoritesNode(this)">▶</span>
+                                        <span class="tree-icon">📁</span>
+                                        <span class="tree-text">Innkaupantanir</span>
+                                    </div>
+                                    <div class="favorites-item">
+                                        <span class="tree-indent"></span>
+                                        <span class="tree-expand" onclick="toggleFavoritesNode(this)">▶</span>
+                                        <span class="tree-icon">📁</span>
+                                        <span class="tree-text">Eftirfylgni</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Command Input Area -->
+                    </div>
+                        <div class="sap-info-box">
+                            Skrifaðu <strong>IH01</strong> í leitar gluggan ýttu á enter.
+                            <br>
+                            <br>
+                            <strong>Ábending:</strong> Ef þú ert þegar í öðrum glugga, sláðu inn <strong>/nIH01</strong> til að fara beint í IH01.
+                        </div>
+                        <button class="sap-nav-button" onclick="checkCommand()" style="margin-top: 20px;">Athuga skipun</button>
+                    </div>
+
+                <!-- Step 2: Enter Material Number -->
+                <div class="sap-step-container" id="step2">
+                    <div class="sap-step-info">
+                        <h2>Skref 2: Slá inn verksmiðjunúmer</h2>
+                        <p>Nú þurfum við að slá inn functional location númerið til að finna rétta staðsetningu.</p>
+                    </div>
+
+                    <div class="sap-window">
+                        <div class="sap-startmenu">
+                            <span class="sap-startmenu-item">📄</span>
+                            <span class="sap-startmenu-item">Forrit</span>
+                            <span class="sap-startmenu-item">Breyta</span>
+                            <span class="sap-startmenu-item">Fara til</span>
+                            <span class="sap-startmenu-item">System</span>
+                            <span class="sap-startmenu-item">Hjálp</span>
+                        </div>
+
+                        <div class="sap-top-toolbar">
+                            <div class="sap-top-left">
+                                <button class="sap-icon1-btn" title="Check">✅</button>
+                                <div class="sap-command-area">
+                                    <div class="command-instruction">
+                                        <input type="text" class="sap-command-field" id="commandField2" placeholder="                     ▼">
+                                    </div>
+                                </div>
+                                <button class="sap-icon1-btn" title="Back">⬅</button>
+                                <button class="sap-icon1-btn" title="Save">💾</button>
+                                <button class="sap-icon1-btn" title="Print">🖨️</button>
+                                <button class="sap-icon1-btn" title="Left arrow">⬅️</button>
+                                <button class="sap-icon1-btn" title="Up arrow">⬆️</button>
+                                <button class="sap-icon1-btn" title="Right arrow">➡️</button>
+                                <button class="sap-icon1-btn" title="First page">📄</button>
+                                <button class="sap-icon1-btn" title="Previous page">📄</button>
+                                <button class="sap-icon1-btn" title="Next page">📄</button>
+                                <button class="sap-icon1-btn" title="last page">📄</button>
+                                <button class="sap-icon1-btn" title="Session">📄</button>
+                                <button class="sap-icon1-btn" title="Hjálp">❓</button>
+                                <button class="sap-icon1-btn" title="Info">💻</button>
+                            </div>
+                        </div>
+
+                        <div class="sap-titlebar">
+                            <span style="font-style: italic;">Uppbygging staðsetningar: Val</span>
+                        </div>
+
+                        <div class="sap-subtitlebar">
+                            <button class="sap-subtitlebar-icon-btn-pulsing" onclick="showMaterialList()">🕒</button>
+                            <button class="sap-subtitlebar-icon-btn" title="Check">✅</button>
+                            <button class="sap-subtitlebar-icon-btn" title="Information">ℹ️</button>
+                        </div>
+
+                        <div class="sap-content">
+                            <div class="sap-field-group">
+                                <label class="sap-field-label">Staðsetning</label>
+                                <input type="text" class="sap-input-pulsing" id="LocationInput" placeholder="Sláið inn 2900 hér">
+
+                            </div>
+                            <div class="sap-field-group">
+                                <label class="sap-field-label">Gildir frá</label>
+                                <input type="text" class="sap-input-small" value="27.05.2025" readonly style="background: #f0f0f0;">
+                            </div>
+                            <div style="margin-top: 20px;">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sap-info-box">
+                        <strong>Athugið:</strong> Skrifa þarf fyrst inn verksmiðju númer okkar 2900 í staðsetningar gluggan, svo smella á klukkuna<br><br>
+                        <em>Það má hunsa aðra reiti sem sjást hér á sapinu, við skrifum aðeins inn 2900</em>
+                    </div>
+                </div>
+
+                <!-- Step 3: Navigate Tree Structure -->
+                <div class="sap-step-container" id="step3">
+                    <div class="sap-step-info">
+                        <h2>Skref 3: Finna lagerinn í tré</h2>
+                        <p>Nú þurfum við að finna og velja BIRGÐAGEYMSLA (LAGER) í Uppbygging staðsetningar tréinu.</p>
+                    </div>
+
+                    <div class="sap-window">
+                        <div class="sap-titlebar">
+                            <span style="font-style: italic;">Uppbygging staðsetnignar Uppbygging lista</span>
+                        </div>
+                        <div class="sap-menu">
+                            <span class="sap-menu-item">Listi</span>
+                            <span class="sap-menu-item">Vinna með</span>
+                            <span class="sap-menu-item">Fara til</span>
+                            <span class="sap-menu-item">Viðbætur</span>
+                            <span class="sap-menu-item">Umhverfin</span>
+                            <span class="sap-menu-item">Styllingar</span>
+                            <span class="sap-menu-item">System</span>
+                            <span class="sap-menu-item">Hjálp</span>
+                        </div>
+
+                        <div class="sap-tree">
+                            <div class="sap-tree-header">
+                                <div class="tree-col-1">
+                                    <span class="sap-tree-header-item">Staðsetninga kóðar</span>
+                                </div>
+                                <div class="tree-col-2">
+                                    <span class="sap-tree-header-item">Staðsetningar lýsingar</span>
+                                </div>
+                                <div class="tree-col-3">
+                                    <span class="sap-tree-header-item"></span>
+                                </div>
+                            </div>
+
+                            <div id="treeContainer">
+                                <!-- Level 0: Root -->
+                                <div class="tree-row" data-level="0" data-node-id="level0">
+                                    <div class="tree-columns">
+                                        <div class="tree-col-1">
+                                            <span class="tree-expand" onclick="toggleNode('level0')">▼</span>
+                                            <span class="tree-icon">📁</span>
+                                            <span class="tree-text">2900</span>
+                                        </div>
+                                        <div class="tree-col-2">Isal</div>
+                                        <div class="tree-col-3"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Level 1: Children of 2900 -->
+                                 <div class="tree-row" data-level="1" data-node-id="level0-0040">
+                                        <div class="tree-columns">
+                                            <div class="tree-col-1">
+                                                <span class="tree-indent"></span>
+                                                <span class="tree-expand" onclick="toggleNode('level0-0040')">▶</span>
+                                                <span class="tree-icon">📁</span>
+                                                <span class="tree-text">2900-0040</span>
+                                            </div>
+                                            <span class="tree-indent-text"></span>
+                                            <div class="tree-col-2">Steypuskáli</div>
+                                            <div class="tree-col-3"></div>
+                                        </div>
+                                    </div>
+
+                                <div class="tree-row" data-level="1" data-node-id="level0-0050">
+                                        <div class="tree-columns">
+                                            <div class="tree-col-1">
+                                                <span class="tree-indent"></span>
+                                                <span class="tree-expand" onclick="toggleNode('level0-0050')">▶</span>
+                                                <span class="tree-icon">📁</span>
+                                                <span class="tree-text">2900-0050</span>
+                                            </div>
+                                            <span class="tree-indent-text"></span>
+                                            <div class="tree-col-2">Súráls- og álflúoríðflutningskerfi</div>
+                                            <div class="tree-col-3"></div>
+                                        </div>
+                                    </div>
+
+                                <div class="tree-children expanded" id="children-level0">
+                                    <div class="tree-row" data-level="1" data-node-id="level1-0060">
+                                        <div class="tree-columns">
+                                            <div class="tree-col-1">
+                                                <span class="tree-indent"></span>
+                                                <span class="tree-expand" onclick="toggleNode('level1-0060')">▶</span>
+                                                <span class="tree-icon">📁</span>
+                                                <span class="tree-text">2900-0060</span>
+                                            </div>
+                                            <span class="tree-indent-text"></span>
+                                            <div class="tree-col-2">Önnur ferli</div>
+                                            <div class="tree-col-3"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Level 2: Children of 2900-0060 -->
+                                    <div class="tree-children" id="children-level1-0060">
+                                        <div class="tree-row" data-level="2" data-node-id="level2-0010">
+                                            <div class="tree-columns">
+                                                <div class="tree-col-1">
+                                                    <span class="tree-indent"></span>
+                                                    <span class="tree-indent"></span>
+                                                    <span class="tree-expand" onclick="toggleNode('level2-0010')">▶</span>
+                                                    <span class="tree-icon">📁</span>
+                                                    <span class="tree-text">2900-0060-0010</span>
+                                                </div>
+                                                <span class="tree-indent-text"></span>
+                                                <span class="tree-indent-text"></span>
+                                                <div class="tree-col-2">Byggingar fyrir önnur ferli</div>
+                                                <div class="tree-col-3"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Level 3: Children of 2900-0060-0010 -->
+
+                                        <div class="tree-children" id="children-level2-0010">
+                                            <!-- SIBLING BEFORE: Level 3 sibling that appears BEFORE 2900-0060-0010-0020 -->
+                                            <div class="tree-row" data-level="3" data-node-id="level3-0010">
+                                                <div class="tree-columns">
+                                                    <div class="tree-col-1">
+                                                        <span class="tree-indent"></span>
+                                                        <span class="tree-indent"></span>
+                                                        <span class="tree-indent"></span>
+                                                        <span class="tree-expand" >▶</span>
+                                                        <span class="tree-icon">📁</span>
+                                                        <span class="tree-text">2900-0060-0010-0010</span>
+                                                    </div>
+                                                    <span class="tree-indent-text"></span>
+                                                    <span class="tree-indent-text"></span>
+                                                    <span class="tree-indent-text"></span>
+                                                    <div class="tree-col-2">Byggingar fyrir skrifstofur og mötuneyti</div>
+                                                    <div class="tree-col-3"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="tree-row" data-level="3" data-node-id="level3-0020">
+                                                <div class="tree-columns">
+                                                    <div class="tree-col-1">
+                                                        <span class="tree-indent"></span>
+                                                        <span class="tree-indent"></span>
+                                                        <span class="tree-indent"></span>
+                                                        <span class="tree-expand" onclick="toggleNode('level3-0020')">▶</span>
+                                                        <span class="tree-icon">📁</span>
+                                                        <span class="tree-text">2900-0060-0010-0020</span>
+                                                    </div>
+                                                    <span class="tree-indent-text"></span>
+                                                    <span class="tree-indent-text"></span>
+                                                    <span class="tree-indent-text"></span>
+                                                    <div class="tree-col-2">Byggingar fyrir hjálparkerfi</div>
+                                                    <div class="tree-col-3"></div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Level 4: Children of 2900-0060-0010-0020 -->
+                                            <div class="tree-children" id="children-level3-0020">
+                                                <div class="tree-row" data-level="4">
+                                                    <div class="tree-columns">
+                                                        <div class="tree-col-1">
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-expand">▶</span>
+                                                            <span class="tree-icon">📁</span>
+                                                            <span class="tree-text">2900US10</span>
+                                                        </div>
+                                                        <span class="tree-indent-text"></span>
+                                                        <span class="tree-indent-text"></span>
+                                                        <span class="tree-indent-text"></span>
+                                                        <span class="tree-indent-text"></span>
+                                                        <div class="tree-col-2">BYGGING SLÖKKVISTÖÐVAR</div>
+                                                        <div class="tree-col-3"></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="tree-row" data-level="4">
+                                                    <div class="tree-columns">
+                                                        <div class="tree-col-1">
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-expand">▶</span>
+                                                            <span class="tree-icon">📁</span>
+                                                            <span class="tree-text">2900US15</span>
+                                                        </div>
+                                                        <span class="tree-indent-text"></span>
+                                                        <span class="tree-indent-text"></span>
+                                                        <span class="tree-indent-text"></span>
+                                                        <span class="tree-indent-text"></span>
+                                                        <div class="tree-col-2">BYGGING HLIÐVÖRSLU</div>
+                                                        <div class="tree-col-3"></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="tree-row clickable-warehouse" data-level="4" data-node-id="warehouse">
+                                                    <div class="tree-columns">
+                                                        <div class="tree-col-1">
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-expand" onclick="toggleNode('warehouse')">▶</span>
+                                                            <span class="tree-icon">📁</span>
+                                                            <span class="tree-text" id="warehouseText">2900US21</span>
+                                                        </div>
+                                                        <span class="tree-indent-text"></span>
+                                                        <span class="tree-indent-text"></span>
+                                                        <span class="tree-indent-text"></span>
+                                                        <span class="tree-indent-text"></span>
+                                                        <div class="tree-col-2">BIRGÐAGEYMSLA (LAGER)</div>
+                                                        <div class="tree-col-3"></div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Warehouse sub-items (Level 5) -->
+                                                <div class="tree-children" id="children-warehouse">
+                                                    <div class="tree-row warehouse-child" data-level="5">
+                                                        <div class="tree-columns">
+                                                            <div class="tree-col-1">
+                                                                <span class="tree-indent"></span>
+                                                                <span class="tree-indent"></span>
+                                                                <span class="tree-indent"></span>
+                                                                <span class="tree-indent"></span>
+                                                                <span class="tree-indent"></span>
+                                                                <span class="tree-expand">▶</span>
+                                                                <span class="tree-icon">📄</span>
+                                                                <span class="tree-text" id="birgdageymslaText">60761393</span>
+                                                            </div>
+                                                            <span class="tree-indent-text"></span>
+                                                            <span class="tree-indent-text"></span>
+                                                            <span class="tree-indent-text"></span>
+                                                            <span class="tree-indent-text"></span>
+                                                            <span class="tree-indent-text"></span>
+                                                            <div class="tree-col-2" id="birgdageymslaDesc">
+                                                                <span class="birgda-clickable" onclick="selectBirgdageymsla(event)">BIRGÐAGEYMSLA (LAGER)</span>
+                                                            </div>
+                                                            <div class="tree-col-3">1,000</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="tree-row" data-level="4">
+                                                    <div class="tree-columns">
+                                                        <div class="tree-col-1">
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-expand">▶</span>
+                                                            <span class="tree-icon">📁</span>
+                                                            <span class="tree-text">2900US22</span>
+                                                        </div>
+                                                        <span class="tree-indent-text"></span>
+                                                        <span class="tree-indent-text"></span>
+                                                        <span class="tree-indent-text"></span>
+                                                        <span class="tree-indent-text"></span>
+                                                        <div class="tree-col-2">HRÁEFNAGEYMSLA 1</div>
+                                                        <div class="tree-col-3"></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="tree-row" data-level="4">
+                                                    <div class="tree-columns">
+                                                        <div class="tree-col-1">
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-indent"></span>
+                                                            <span class="tree-expand">▶</span>
+                                                            <span class="tree-icon">📁</span>
+                                                            <span class="tree-text">2900US23</span>
+                                                        </div>
+                                                        <span class="tree-indent-text"></span>
+                                                        <span class="tree-indent-text"></span>
+                                                        <span class="tree-indent-text"></span>
+                                                        <span class="tree-indent-text"></span>
+                                                        <div class="tree-col-2">HRÁEFNAGEYMSLA 2</div>
+                                                        <div class="tree-col-3"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                    <!-- LEVEL 2 SIBLING: Add after all children of 2900-0060-0010 -->
+                                        <div class="tree-row" data-level="2" data-node-id="level2-0020">
+                                            <div class="tree-columns">
+                                                <div class="tree-col-1">
+                                                    <span class="tree-indent"></span>
+                                                    <span class="tree-indent"></span>
+                                                    <span class="tree-expand" >▶</span>
+                                                    <span class="tree-icon">📁</span>
+                                                    <span class="tree-text">2900-0060-0020</span>
+                                                </div>
+                                                <span class="tree-indent-text"></span>
+                                                <span class="tree-indent-text"></span>
+                                                <div class="tree-col-2">Fartæki fyrir önnur ferli</div>
+                                                <div class="tree-col-3"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="tree-row" data-level="2" data-node-id="level2-0030">
+                                            <div class="tree-columns">
+                                                <div class="tree-col-1">
+                                                    <span class="tree-indent"></span>
+                                                    <span class="tree-indent"></span>
+                                                    <span class="tree-expand" onclick="toggleNode('level2-0030')">▶</span>
+                                                    <span class="tree-icon">📁</span>
+                                                    <span class="tree-text">2900CY</span>
+                                                </div>
+                                                <span class="tree-indent-text"></span>
+                                                <span class="tree-indent-text"></span>
+                                                <div class="tree-col-2">FJARSKIPTAKERFI</div>
+                                                <div class="tree-col-3"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="tree-row" data-level="2" data-node-id="level2-0050">
+                                            <div class="tree-columns">
+                                                <div class="tree-col-1">
+                                                    <span class="tree-indent"></span>
+                                                    <span class="tree-indent"></span>
+                                                    <span class="tree-expand" onclick="toggleNode('level2-0050')">▶</span>
+                                                    <span class="tree-icon">📁</span>
+                                                    <span class="tree-text">2900-0060-0050</span>
+                                                </div>
+                                                <span class="tree-indent-text"></span>
+                                                <span class="tree-indent-text"></span>
+                                                <div class="tree-col-2">Búnaður fyrir önnur ferli</div>
+                                                <div class="tree-col-3"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Level 3: Children of 2900-0060-0020 (if any) -->
+                                        <div class="tree-children" id="children-level2-0020">
+                                            <!-- Children of level2-0020 would go here -->
+                                        </div>
+                                    </div>
+
+                                    <!-- Sibling: 2900-0070 (appears after all children of 2900-0060) -->
+                                    <div class="tree-row" data-level="1" data-node-id="level1-0070">
+                                        <div class="tree-columns">
+                                            <div class="tree-col-1">
+                                                <span class="tree-indent"></span>
+                                                <span class="tree-expand" onclick="toggleNode('level1-0070')">▶</span>
+                                                <span class="tree-icon">📁</span>
+                                                <span class="tree-text">2900-0070</span>
+                                            </div>
+                                            <span class="tree-indent-text"></span>
+                                            <div class="tree-col-2">Raforkuveita</div>
+                                            <div class="tree-col-3"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tree-row" data-level="1" data-node-id="level1-0080">
+                                        <div class="tree-columns">
+                                            <div class="tree-col-1">
+                                                <span class="tree-indent"></span>
+                                                <span class="tree-expand" onclick="toggleNode('level1-0080')">▶</span>
+                                                <span class="tree-icon">📁</span>
+                                                <span class="tree-text">2900-0080</span>
+                                            </div>
+                                            <span class="tree-indent-text"></span>
+                                            <div class="tree-col-2">Veitur</div>
+                                            <div class="tree-col-3"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tree-row" data-level="1" data-node-id="level1-0850">
+                                        <div class="tree-columns">
+                                            <div class="tree-col-1">
+                                                <span class="tree-indent"></span>
+                                                <span class="tree-expand" onclick="toggleNode('level1-0850')">▶</span>
+                                                <span class="tree-icon">📁</span>
+                                                <span class="tree-text">2900-0850</span>
+                                            </div>
+                                            <span class="tree-indent-text"></span>
+                                            <div class="tree-col-2">Viðhaldssvið</div>
+                                            <div class="tree-col-3"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Level 2: Children of 2900-0070 (if any) -->
+                                    <div class="tree-children" id="children-level1-0070">
+                                        <!-- Children of 2900-0070 would go here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sap-info-box">
+                        <strong>Leiðbeiningar:</strong><br>
+                        1. <strong>2900</strong> Er opið og sýnir ▼ tákn<br>
+                        2. Ýttu á ▼ hjá <strong>2900-0060</strong><br>
+                        3. Ýttu á ▼ hjá <strong>2900-0060-0010</strong><br>
+                        4. Ýttu á ▼ hjá<strong>2900-0060-0010-0020</strong><br>
+                        5. Ýttu á ▼ hjá <strong>2900US21 (WAREHOUSE)</strong><br>
+                        6. Að lokum ýttu einu sinni á <strong>BIRGÐAGEYMSLA (LAGER)</strong> þannig að línan sé valin.
+                    </div>
+                </div>
+
+                <!-- Step 4: Create Notification -->
+                <div class="sap-step-container" id="step4">
+                    <div class="sap-step-info">
+                        <h2>Skref 4: Opna stofna tilkynningu glugga</h2>
+                        <p>Frábært! Þú hefur valið BIRGÐAGEYMSLA (LAGER). Nú förum við í valmyndina til að stofna tilkynningu.</p>
+                    </div>
+
+                    <div class="sap-window">
+                        <div class="sap-titlebar">
+                            <span style="font-style: italic;">Functional Location Structure: Structure List</span>
+                        </div>
+
+                        <div class="sap-menu" style="position: relative;">
+                            <span class="sap-menu-item">Listi</span>
+                            <span class="sap-menu-item">Vinna með</span>
+                            <span class="sap-menu-item highlighted" id="faraMenuHighlight4" style="animation: pulse 2s infinite;" onclick="showFaraDropdown()">Fara til</span>
+                            <div class="sap-dropdown-menu" id="faraDropdown" onmouseover="keepFaraDropdown()" onmouseout="hideFaraDropdown()">
+                                <div class="sap-dropdown-item sap-submenu" onmouseover="showStofnaSubmenu()" onmouseout="hideStofnaSubmenu()">
+                                    Stofna tilkynning
+                                    <div class="sap-submenu-content" id="stofnaSubmenu" onmouseover="keepStofnaSubmenu()" onmouseout="hideStofnaSubmenu()">
+                                        <div class="sap-dropdown-item" onclick="selectAlmennt()">Almennt</div>
+                                        <div class="sap-dropdown-item">Bilunarskýrsla</div>
+                                    </div>
+                                </div>
+                                <div class="sap-dropdown-item">Stofna verk</div>
+                                <div class="sap-dropdown-item">Graphic</div>
+                            </div>
+                            <span class="sap-menu-item">Viðbætur</span>
+                            <span class="sap-menu-item">umhverfi</span>
+                            <span class="sap-menu-item">Stillingar</span>
+                            <span class="sap-menu-item">System</span>
+                            <span class="sap-menu-item">Hjálp</span>
+                        </div>
+
+                        <div class="sap-tree">
+                            <div class="sap-tree-header">
+                                <div class="tree-col-1">
+                                    <span class="sap-tree-header-item">Functional Location</span>
+                                </div>
+                                <div class="tree-col-2">
+                                    <span class="sap-tree-header-item">FuncLocDesc</span>
+                                </div>
+                                <div class="tree-col-3">
+                                    <span class="sap-tree-header-item">Valid From</span>
+                                </div>
+                            </div>
+
+                            <div id="frozenTreeContainer">
+                                <div class="tree-row" data-level="0">
+                                    <div class="tree-columns">
+                                        <div class="tree-col-1">
+                                            <span class="tree-expand">▼</span>
+                                            <span class="tree-icon">📁</span>
+                                            <span class="tree-text">2900-0060-0010-0020</span>
+                                        </div>
+                                        <div class="tree-col-2">Byggingar fyrir hjálparkerfi</div>
+                                        <div class="tree-col-3">27.05.2025</div>
+                                    </div>
+                                </div>
+
+                                <div class="tree-row" data-level="1">
+                                    <div class="tree-columns">
+                                        <div class="tree-col-1">
+                                            <span class="tree-indent"></span>
+                                            <span class="tree-expand">▶</span>
+                                            <span class="tree-icon">📁</span>
+                                            <span class="tree-text">2900US10</span>
+                                        </div>
+                                        <div class="tree-col-2">FIRE STATION BUILDING</div>
+                                        <div class="tree-col-3"></div>
+                                    </div>
+                                </div>
+
+                                <div class="tree-row" data-level="1">
+                                    <div class="tree-columns">
+                                        <div class="tree-col-1">
+                                            <span class="tree-indent"></span>
+                                            <span class="tree-expand">▶</span>
+                                            <span class="tree-icon">📁</span>
+                                            <span class="tree-text">2900US15</span>
+                                        </div>
+                                        <div class="tree-col-2">GATEHOUSE</div>
+                                        <div class="tree-col-3"></div>
+                                    </div>
+                                </div>
+
+                                <div class="tree-row" data-level="1">
+                                    <div class="tree-columns">
+                                        <div class="tree-col-1">
+                                            <span class="tree-indent"></span>
+                                            <span class="tree-expand">▼</span>
+                                            <span class="tree-icon">📁</span>
+                                            <span class="tree-text">2900US21</span>
+                                        </div>
+                                        <div class="tree-col-2">WAREHOUSE</div>
+                                        <div class="tree-col-3"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Selected BIRGÐAGEYMSLA - highlighted in yellow -->
+                                <div class="tree-row selected" data-level="2">
+                                    <div class="tree-columns">
+                                        <div class="tree-col-1">
+                                            <span class="tree-indent"></span>
+                                            <span class="tree-indent"></span>
+                                            <span class="tree-expand">■</span>
+                                            <span class="tree-icon">📄</span>
+                                            <span class="tree-text">60761393</span>
+                                        </div>
+                                        <div class="tree-col-2">BIRGÐAGEYMSLA (LAGER)</div>
+                                        <div class="tree-col-3">1,000</div>
+                                    </div>
+                                </div>
+
+                                <div class="tree-row" data-level="1">
+                                    <div class="tree-columns">
+                                        <div class="tree-col-1">
+                                            <span class="tree-indent"></span>
+                                            <span class="tree-expand">▶</span>
+                                            <span class="tree-icon">📁</span>
+                                            <span class="tree-text">2900US22</span>
+                                        </div>
+                                        <div class="tree-col-2">RAW MATERIAL STOREROOM 1</div>
+                                        <div class="tree-col-3"></div>
+                                    </div>
+                                </div>
+
+                                <div class="tree-row" data-level="1">
+                                    <div class="tree-columns">
+                                        <div class="tree-col-1">
+                                            <span class="tree-indent"></span>
+                                            <span class="tree-expand">▶</span>
+                                            <span class="tree-icon">📁</span>
+                                            <span class="tree-text">2900US23</span>
+                                        </div>
+                                        <div class="tree-col-2">RAW MATERIAL STOREROOM 2</div>
+                                        <div class="tree-col-3"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sap-info-box">
+                        <strong>Leiðbeiningar:</strong><br>
+                        1. Smelltu á <strong>"Fara til"</strong> í valmyndinni<br>
+                        2. Færðu músina yfir <strong>"Stofna tilkyinning"</strong> til að sjá undirmöppuna<br>
+                        3. Smelltu á <strong>"Almennt"</strong> til að búa til almenna tilkynningu
+                    </div>
+                </div>
+
+                <!-- Step 5: Open Object Information -->
+                <div class="sap-step-container" id="step5">
+                    <div class="sap-step-info">
+                        <h2>Skref 5: Opna Object information glugga</h2>
+                        <p>Nú ýtiru á enter til að opna Object information til að bæta við upplýsingum.</p>
+                    </div>
+
+                   <div class="sap-window">
+                        <div class="sap-titlebar">
+                            <span style="font-style: italic;">Stofna PM Tilkynningu: Upphafsskjár</span>
+                        </div>
+                        <div class="sap-subtitlebar">
+                            <span style="font-size: 13px; font-weight: normal;">Tilkynning</span>
+                        </div>
+
+                        <div class="sap-content" style="background: #f0f8ff; padding: 20px;">
+
+                            <div class="sap-field-group">
+                                <label class="sap-field-label">Teg. tilkynnignar</label>
+                                <input type="text" class="sap-input-tiny" value="M1" readonly style="background: #f0f0f0;">
+                            </div>
+
+                            <div class="sap-field-group">
+                                <label class="sap-field-label">Tilkynning</label>
+                                <input type="text" class="sap-input" id="notificationField" placeholder="">
+                            </div>
+
+                            <div style="border: 1px solid #999; padding: 15px; margin-top: 20px; background: #fff;">
+                                <div style="font-size: 13px; margin-bottom: 10px; color: #333;">Tilvísun</div>
+                                <div class="sap-field-group" style="margin-bottom: 5px;">
+                                    <label class="sap-field-label">Tilvísunartilkynning</label>
+                                    <input type="text" class="sap-input" id="referenceField" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sap-info-box">
+                        <strong>Leiðbeiningar:</strong><br>
+                        1. Skildu Notification type sem "M1" og ýttu á <strong>Enter</strong><br>
+                        2. Object Information glugginn mun opnast<br>
+                        3. Smelltu á græna hakreitin eða enter <strong>✓</strong> til að staðfesta og halda áfram<br><br>
+                        <em>Þú þarft ekki að fylla út önnur svæði</em>
+                    </div>
+
+                    <!-- Object Information Popup (hidden by default) -->
+                    <div id="objectInfoPopup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000;" onclick="closeIfClickedOutside(event)">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px;">
+                            <div class="sap-window">
+                                <div class="sap-titlebar" style="display: flex; align-items: center; gap: 5px;">
+                                    <span style="font-size: 16px;">📝</span>
+                                    <span style="font-style: italic;">Object information</span>
+                                </div>
+                                <div class="sap-subtitlebar">
+                                    <span style="font-size: 13px; font-weight: bold; margin-right: 25px;">Select.indic.since 05/2025</span>
+                                    <span style="font-size: 13px; font-weight: bold;">Select.notif.since.27.05.2025</span>
+                                </div>
+
+                                <!-- Content Area -->
+                                <div class="sap-content" style="background: white; padding: 15px;">
+                                    <!-- Reference Section -->
+                                    <div style="display: flex; gap: 60px;">
+                                        <div style="flex: 1;">
+                                            <div class="sap-field-group" style="margin-bottom: 8px;">
+                                                <label class="sap-field-label-small">BrkdnReptd</label>
+                                                <input type="text" class="sap-input-small" value="0" readonly style="background: #f0f0f0;">
+                                            </div>
+                                            <div class="sap-field-group" style="margin-bottom: 8px;">
+                                                <label class="sap-field-label-small">NotifCreat.</label>
+                                                <input type="text" class="sap-input-tiny" value="4" readonly style="background: #f0f0f0;">
+                                            </div>
+                                            <div class="sap-field-group" style="margin-bottom: 8px;">
+                                                <label class="sap-field-label-small">Notification</label>
+                                                <input type="text" class="sap-input-small" value="" readonly style="background: #f0f0f0;">
+                                            </div>
+                                        </div>
+
+                                        <div style="flex: 1;">
+                                            <div style="margin-bottom: 20px;">&nbsp;</div>
+                                            <div class="sap-field-group" style="margin-bottom: 8px;">
+                                                <label class="sap-field-label-medium">ProcsDays</label>
+                                                <input type="text" class="sap-input-tiny" value="144" readonly style="background: #f0f0f0;">
+                                            </div>
+                                            <div class="sap-field-group" style="margin-bottom: 8px;">
+                                                <label class="sap-field-label-medium">ComplNotif</label>
+                                                <input type="text" class="sap-input-tiny" value="6" readonly style="background: #f0f0f0;">
+                                            </div>
+                                            <div class="sap-field-group" style="margin-bottom: 8px;">
+                                                <label class="sap-field-label-medium">ComplOrds</label>
+                                                <input type="text" class="sap-input-tiny" value="5" readonly style="background: #f0f0f0;">
+                                            </div>
+                                        </div>
+
+                                        <div style="flex: 0.5;">
+                                            <div style="margin-bottom: 20px;">&nbsp;</div>
+                                            <div style="margin-bottom: 8px;">
+                                                <button class="sap-button" style="background: #ffcc00; padding: 2px 8px;"> IS </button>
+                                            </div>
+                                            <div style="margin-bottom: 8px;">
+                                                <button class="sap-button" style="background: #ffcc00; padding: 2px 8px;"> Notif </button>
+                                            </div>
+                                            <div style="margin-bottom: 8px;">
+                                                <button class="sap-button" style="padding: 2px 8px;">Order</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Description Table -->
+                                    <div style="margin-top: 15px;">
+                                        <div style="background: #e7eef6; padding: 4px 8px; font-size: 12px; display: flex; justify-content: space-between;">
+                                            <span>Lýsing</span>
+                                            <div style="display: flex; gap: 40px;">
+                                                <span>Dagsetning</span>
+                                                <span>Lok</span>
+                                                <span style="margin-right: 10px;">P</span>
+                                            </div>
+                                        </div>
+                                        <table class="sap-table" style="width: 100%; margin-top: 0;">
+                                            <tr>
+                                                <td style="width: 60%;">Handrið laust og þröngt.</td>
+                                                <td style="width: 16%;"> 04.06.2025</td>
+                                                <td style="width: 16%;"></td>
+                                                <td style="text-align: center;">3</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Setja upp 3 fasa tengli fyrir hleðslutæki</td>
+                                                <td>16.05.2025</td>
+                                                <td></td>
+                                                <td style="text-align: center;">3</td>
+                                            </tr>
+                                            <tr>
+                                                <td>573 - Skipta um ljós á innri lager mars</td>
+                                                <td>10.04.2025</td>
+                                                <td></td>
+                                                <td style="text-align: center;">6</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                    <!-- Last Active Order Section -->
+                                    <div style="margin-top: 15px;">
+                                        <div style="background: #e7eef6; padding: 4px 8px; font-size: 12px;">Last Active Order</div>
+                                        <div style="display: flex; gap: 20px; margin-top: 10px;">
+                                            <div class="sap-field-group">
+                                                <label class="sap-field-label-medium">Description</label>
+                                                <input type="text" class="sap-input" value="Skipta um öll ljós á Lager" readonly style="background: #f0f0f0;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Bottom tabs -->
+                                <div style="background: #f0f0f0; padding: 3px; display: flex; gap: 2px; border-bottom: 1px solid #999;">
+                                     <button class="sap-icon-btn" style="font-size: 16px; color: green; font-weight: bold; animation: pulse 2s infinite;" onclick="confirmObjectInfo()" title="Confirm">✓</button>
+                                    <button class="sap-icon-btn" title="Next">▶</button>
+                                    <button class="sap-icon-btn" title="List">📋</button>
+                                    <button class="sap-icon-btn" title="Calendar">📅</button>
+                                    <button class="sap-icon-btn" title="Plant">🏭</button>
+                                    <button class="sap-icon-btn" title="Document">📄</button>
+                                    <button class="sap-icon-btn" title="Schedule">📅</button>
+                                    <button class="sap-icon-btn" title="Table">⊞</button>
+                                    <button class="sap-icon-btn" title="Maintenance">🔧</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 6: Write Description and Save -->
+                <div class="sap-step-container" id="step6">
+                    <div class="sap-step-info">
+                        <h2>Skref 6: Skrifa lýsingu og vista</h2>
+                        <p>Að lokum skrifum við lýsingu á tilkynninguna og vistum hana í kerfinu.</p>
+                    </div>
+
+                    <div class="sap-window">
+                        <div class="sap-startmenu">
+                            <span class="sap-startmenu-item">📄 PM Tilkynning</span>
+                            <span class="sap-startmenu-item">Vinna með</span>
+                            <span class="sap-startmenu-item">Fara til</span>
+                            <span class="sap-startmenu-item">Viðbætur</span>
+                            <span class="sap-startmenu-item">Umhverfi</span>
+                            <span class="sap-startmenu-item">System</span>
+                            <span class="sap-startmenu-item">Hjálp</span>
+                        </div>
+
+                        <div class="sap-top-toolbar">
+                            <div class="sap-top-left">
+                                <button class="sap-icon1-btn" title="Check" style="color: green;">✅</button>
+                                <div class="sap-command-area" style="width: 200px;">
+                                    <select class="sap-dropdown" style="width: 190px;">
+                                        <option>▼</option>
+                                    </select>
+                                </div>
+                                <button class="sap-icon1-btn" title="Back">⬅</button>
+                                <button class="sap-action-button" style="background: #4caf50; color: white; font-weight: bold; animation: pulse 2s infinite;" onclick="saveNotification()">
+                                     💾 Vista
+                                </button>
+                                <button class="sap-icon1-btn" title="Cancel">❌</button>
+                                <button class="sap-icon1-btn" title="Print">🖨️</button>
+                                <button class="sap-icon1-btn" title="Find">🔍</button>
+                                <button class="sap-icon1-btn" title="Find next">🔎</button>
+                                <button class="sap-icon1-btn" title="First page">⏮️</button>
+                                <button class="sap-icon1-btn" title="Previous page">◀️</button>
+                                <button class="sap-icon1-btn" title="Next page">▶️</button>
+                                <button class="sap-icon1-btn" title="Last page">⏭️</button>
+                                <button class="sap-icon1-btn" title="Graphics">📊</button>
+                                <button class="sap-icon1-btn" title="Details">📋</button>
+                                <button class="sap-icon1-btn" title="Hjálp">❓</button>
+                                <button class="sap-icon1-btn" title="Customize">⚙️</button>
+                            </div>
+                        </div>
+
+                        <div class="sap-titlebar">
+                            <span style="font-weight: bold;">📝 Stofna PM Tilkynningu: Viðhaldstilkynning</span>
+                        </div>
+
+                        <div class="sap-toolbar" style="background: #e7eef6; padding: 3px;">
+                            <button class="sap-icon-btn" title="Ferli">👤</button>
+                            <button class="sap-icon-btn" title="Upplýsingar">📋</button>
+                            <button class="sap-icon-btn" title="Áhættumat">⚠️</button>
+                            <button class="sap-icon-btn" title="Bilanir">🔧</button>
+                            <button class="sap-icon-btn" title="Aðgerðir">📝</button>
+                            <button class="sap-icon-btn" title="Verkþættir">📊</button>
+                            <button class="sap-icon-btn" title="Vörulisti">📦</button>
+                            <button class="sap-icon-btn" title="Viðskiptamaður">👥</button>
+                            <button class="sap-icon-btn" title="Viðhengi">📎</button>
+                        </div>
+
+                        <div class="sap-content" style="background: #f8fbff;">
+                            <!-- Notification Header -->
+                            <div class="sap-field-group" style="margin-bottom: 1px;">
+                                <label class="sap-field-label">Tilkynning</label>
+                                <input type="text" class="sap-input-medium" value="66973886" readonly style="background: #f0f0f0;">
+                                <select class="sap-dropdown" style="width: 40px;">
+                                    <option>M1</option>
+                                </select>
+                                <button class="sap-icon-btn" title="Breyta">✏️</button>
+                                <input type="text" class="sap-input" id="infotext" placeholder="✓ Skrifaðu hér stutta lýsingu" style="animation: pulse 2s infinite">
+                            </div>
+
+                            <div class="sap-field-group" style="margin-bottom: 1px;">
+                                <label class="sap-field-label">Notific. Status</label>
+                                <input type="text" class="sap-input-small" value="OSNO" readonly style="background: #f0f0f0;">
+                                <button class="sap-icon-btn" title="Upplýsingar">ℹ️</button>
+                                <input type="text" class="sap-input-small" value="CRTD" readonly style="background: #f0f0f0;">
+                                <span style="color: green; font-size: 16px;">✅</span>
+                            </div>
+
+                            <div class="sap-field-group">
+                                <label class="sap-field-label">Order</label>
+                                <input type="text" class="sap-input" value="">
+                                <button class="sap-icon-btn" title="Finna">🔍</button>
+                            </div>
+
+                            <!-- Tab Navigation -->
+                            <div class="sap-tab-container">
+                                <div class="sap-tab active">🏠 HVAÐ?</div>
+                                <div class="sap-tab">📋 Áreiðanleiki</div>
+                                <div class="sap-tab">📄 Skjöl og ábyrgðir</div>
+                                <div class="sap-tab">📍 Staðsetning</div>
+                                <div class="sap-tab">📅 ViðhaldsPlan</div>
+                                <div class="sap-tab">✅ Verk</div>
+                                <div class="sap-tab">🔧 Viðh.aðgerðir </div>
+                                <div class="sap-tab">👥 Ábyrgð</div>
+                            </div>
+
+                            <!-- Reference Object Section -->
+                            <div style="border: 1px solid #999; padding: 10px; margin-top: 1px; background: #e8f4ff;">
+                                <div style="font-size: 13px; font-weight: bold; margin-bottom: 1px;">Reference object</div>
+
+                                <div class="sap-field-group" style="margin-bottom: 1px;">
+                                    <label class="sap-field-label">Framl.Eining</label>
+                                    <input type="text" class="sap-input-small" value="2900US21" readonly style="background: #f0f0f0;">
+                                    <span style="margin-left: 140px;">BIRGÐAGEYMSLA (LAGER)</span>
+                                </div>
+
+                                <div class="sap-field-group" style="margin-bottom: 1px;">
+                                    <label class="sap-field-label">Staðsetning</label>
+                                    <input type="text" class="sap-input" value="2900US21" readonly style="background: #f0f0f0;">
+                                    <span style="margin-left: 20px;">BIRGÐAGEYMSLA (LAGER)</span>
+                                    <button class="sap-icon-btn" title="Hierarchy">📊</button>
+                                    <button class="sap-icon-btn" title="BOM">📋</button>
+                                </div>
+
+                                <div class="sap-field-group" style="margin-bottom: 1px;">
+                                    <label class="sap-field-label">Búnaður</label>
+                                    <input type="text" class="sap-input" value="">
+                                </div>
+
+                                <div class="sap-field-group" style="margin-bottom: 1px;">
+                                    <label class="sap-field-label">Undribúnaður</label>
+                                    <input type="text" class="sap-input-medium" value="60761393" readonly style="background: #f0f0f0;">
+                                    <span style="margin-left: 20px;">BIRGÐAGEYMSLA (LAGER)</span>
+                                </div>
+                            </div>
+
+                            <!-- MoC Section -->
+                            <div style="border: 1px solid #999; padding: 10px; margin-top: 10px; background: #e8f4ff;">
+                                <div style="font-size: 13px; font-weight: bold; margin-bottom: 10px;">MoC (Management of Change)</div>
+                                <div class="sap-field-group">
+                                    <label class="sap-field-label">Þörf á MoC?</label>
+                                    <input type="checkbox" class="sap-checkbox">
+                                </div>
+                            </div>
+
+                            <!-- Start/End Dates Section -->
+                            <div style="border: 1px solid #999; padding: 10px; margin-top: 10px; background: #e8f4ff;">
+                                <div style="font-size: 13px; font-weight: bold; margin-bottom: 10px;">Upphafs-/endadagsetning</div>
+
+                                <div class="sap-field-group" style="margin-bottom: 1px;">
+                                    <label class="sap-field-label">Skilyrt byrjun</label>
+                                    <input type="text" class="sap-input-small" value="10.06.2025">
+                                    <input type="text" class="sap-input-small" value="08:17:33">
+                                    <label style="margin-left: 20px; font-weight: bold">Forgangur</label>
+                                    <select class="sap-dropdown" id="priorityDropdown" style="width: 120px; background: #ffffcc; animation: pulse 2s infinite;">
+                                        <option value="">Velja mikilvægi</option>
+                                        <option value="1">Tafarlaust</option>
+                                        <option value="2">Núver. framkv vika</option>
+                                        <option value="3">Næsta. framkv vika</option>
+                                        <option value="4">Önnur. framkv vika</option>
+                                        <option value="5">Þriðja. framkv vika</option>
+                                        <option value="5">Framtíðar vinna</option>
+                                    </select>
+                                </div>
+
+                                <div class="sap-field-group" style="margin-bottom: 1px;">
+                                    <label class="sap-field-label">Skilyrt endad.</label>
+                                    <input type="text" class="sap-input-small" value="">
+                                    <input type="text" class="sap-input-small" value="00:00:00">
+                                    <input type="checkbox" class="sap-checkbox">
+                                    <label>Breakdown</label>
+                                </div>
+
+                                <div class="sap-field-group" style="margin-bottom: 1px;">
+                                    <label class="sap-field-label">Endurskoðun</label>
+                                    <input type="text" class="sap-input-small" value="">
+                                    <input type="text" class="sap-input-small" value="2900">
+                                </div>
+                            </div>
+
+                            <!-- Responsibilities Section -->
+                            <div style="border: 1px solid #999; padding: 10px; margin-top: 10px; background: #e8f4ff;">
+                                <div style="font-size: 13px; font-weight: bold; margin-bottom: 10px;">Responsibilities</div>
+
+                                <div class="sap-field-group">
+                                    <label class="sap-field-label">Planner group</label>
+                                    <input type="text" class="sap-input-small" value="CEN">
+                                    <span>/</span>
+                                    <input type="text" class="sap-input-small" value="2900">
+                                    <span style="margin-left: 20px;">Svæðisþjónusta Vh.</span>
+                                </div>
+
+                                <div class="sap-field-group">
+                                    <label class="sap-field-label">Main WorkCtr</label>
+                                    <input type="text" class="sap-input-small" value="M71004R">
+                                    <span>/</span>
+                                    <input type="text" class="sap-input-small" value="2900">
+                                    <span style="margin-left: 20px;">Central Service / Ele</span>
+                                </div>
+
+                                <div class="sap-field-group">
+                                    <label class="sap-field-label">Tilkynnt af</label> <!-- bolda -->
+                                    <input type="text" class="sap-input" id="Sapname" style="width: 400px; animation: pulse 2s infinite;" placeholder="Skrifaðu hér sap nafnið þitt...">
+                                    <span style="margin-left: 20px;">Notif.date</span>
+                                    <input type="text" class="sap-input-small" value="10.06.2025">
+                                    <input type="text" class="sap-input-small" value="08:17:33">
+                                </div>
+                            </div>
+
+                            <!-- Subject Section -->
+                            <div style="border: 1px solid #999; padding: 10px; margin-top: 10px; background: #e8f4ff;">
+                                <div style="font-size: 13px; font-weight: bold; margin-bottom: 10px;">Subject</div>
+
+                                <div class="sap-field-group">
+                                    <label class="sap-field-label">Bilun</label>
+                                    <input type="text" class="sap-input-small" value="MPA00001">
+                                    <input type="text" class="sap-input-tiny" style=" animation: pulse 2s infinite" value="" placeholder="✓  " >
+                                    <span style="font-size: 12px; color: #666; margin-left: 10px;">← Sláið inn 9999</span>
+                                </div>
+
+                                <div class="sap-field-group">
+                                    <label class="sap-field-label">Lýsing</label>
+                                    <input type="text" class="sap-input" id="descriptionField" style="width: 400px; animation: pulse 2s infinite;" placeholder="Skrifaðu hér stutta lýsingu...">
+                                    <button class="sap-icon-btn" title="Text" >📝</button>
+                                </div>
+
+                                <div style="margin-top: 10px;">
+                                    <textarea style="width: 100%; height: 120px; border: 1px solid #999; padding: 5px; font-family: Arial, sans-serif; font-size: 12px;" placeholder="Skrifaðu hér ýtarlega lýsingu..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom toolbar -->
+                        <div class="sap-bottom-toolbar">
+                            <div class="sap-action-buttons">
+                            </div>
+
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <label style="font-size: 12px;"></label>
+                                <span style="font-size: 12px; color: #666;">SAP | ECP (3) 500</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sap-info-box">
+                        <strong>Leiðbeiningar:</strong><br>
+                        1. Sláðu inn lýsingu á vandamálinu í reitin sem er hægra meginn við  <strong>"✏️"</strong> reitinn<br>
+                        2. Smelltu á <strong>"Forgangur"</strong> og veldu mikilvægi tilkynningar, almennt Núver. framkv vika<br>
+                        3. Sláðu inn sap nafnið þitt í <strong>"Tilkynnt af"</strong> reitin <br>
+                        4. Sláðu aftur inn sömu lýsingu á vandamálinu í <strong>"Lýsing"</strong> reitinn<br>
+                        5. Skrifaðu inn ýtarlega lýsingu á atvaki í stóra gluggan<br>
+                        6. Að lokum smelltu á <strong>"💾 Vista "</strong> hnappinn til að vista<br>
+                    </div>
+
+                    <div class="sap-success-box" id="successMessage" style="display: none;">
+                        <h3>🎉 Til hamingju!</h3>
+                        <p>Þú hefur lokið við að búa til tilkynningu í SAP kerfinu.<br>
+                        Tilkynning númer <strong>66973886</strong> hefur verið vistuð.</p>
+                    </div>
+                </div>
+
+                <script>
+                function saveNotification() {
+                    const description = document.getElementById('descriptionField').value;
+                    const priority = document.getElementById('priorityDropdown').value;
+
+                    if (!description) {
+                        alert('Please enter a description of the problem.');
+                        document.getElementById('descriptionField').focus();
+                        return;
+                    }
+
+                    if (!priority) {
+                        alert('Please select a priority for the task.');
+                        document.getElementById('priorityDropdown').focus();
+                        return;
+                    }
+
+                    // Show success message
+                    document.getElementById('successMessage').style.display = 'block';
+
+                    // Scroll to success message
+                    document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+
+                    // Simulate saving animation
+                    const saveButton = event.target;
+                    saveButton.textContent = '⏳ Vista í gangi...';
+                    saveButton.disabled = true;
+
+                    setTimeout(() => {
+                        saveButton.textContent = '✅ Vistað!';
+                        saveButton.style.background = '#2e7d32';
+                    }, 1500);
+                }
+                </script>
+
+                <div class="sap-nav-buttons">
+                    <button class="sap-nav-button" onclick="previousStep()" id="prevBtn">← Fyrra skref</button>
+                    <button class="sap-nav-button" onclick="nextStep()" id="nextBtn">Næsta skref →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================================================
+        // GLOBAL VARIABLES AND CONSTANTS
+        // ==========================================================================
+        let currentStep = 0;
+        const totalSteps = 7;
+        let expandedNodes = new Set();
+        let warehouseClicked = false;
+        let birgdageymslaClicked = false;
+
+
+        // Dropdown timeout variables
+        let faraDropdownTimeout;
+        let stofnaSubmenuTimeout;
+
+        // ==========================================================================
+        // TREE FUNCTIONS
+        // ==========================================================================
+
+        // Generic tree node toggle function
+        function toggleNode(nodeId) {
+            const childrenContainer = document.getElementById('children-' + nodeId);
+            const expandIcon = document.querySelector(`[data-node-id="${nodeId}"] .tree-expand`);
+
+            if (!childrenContainer) return;
+
+            const isExpanded = expandedNodes.has(nodeId);
+
+            if (isExpanded) {
+                // Collapse
+                childrenContainer.classList.remove('expanded');
+                expandIcon.textContent = '▶';
+                expandedNodes.delete(nodeId);
+            } else {
+                // Expand
+                childrenContainer.classList.add('expanded');
+                expandIcon.textContent = '▼';
+                expandedNodes.add(nodeId);
+
+                // Special handling for warehouse node
+                if (nodeId === 'warehouse') {
+                    warehouseClicked = true;
+                }
+            }
+        }
+
+        function selectBirgdageymsla(event) {
+            if (event) {
+                event.stopPropagation();
+            }
+
+            if (warehouseClicked && !birgdageymslaClicked) {
+                birgdageymslaClicked = true;
+
+                const birgRow = document.querySelector('.warehouse-child');
+                birgRow.classList.add('selected');
+
+                // Remove hover effect
+                const clickableSpan = birgRow.querySelector('.birgda-clickable');
+                if (clickableSpan) {
+                    clickableSpan.style.pointerEvents = 'none';
+                    clickableSpan.style.backgroundColor = 'transparent';
+                }
+
+                setTimeout(() => {
+                    alert('Rétt! Nú hefur þú valið BIRGÐAGEYMSLA (LAGER). Nú höldum við áfram að stofna tilkynningu í sama glugga.');
+                    nextStep();
+                }, 300);
+            } else if (!warehouseClicked) {
+                alert('Þú þarft fyrst að opna öll tré stigin og smella á WAREHOUSE (2900US21) til að opna undirmöppuna.');
+            }
+        }
+
+        function resetTreeState() {
+            // Reset all state variables
+            expandedNodes.clear();
+            expandedNodes.add('level0'); // Keep level0 expanded
+            warehouseClicked = false;
+            birgdageymslaClicked = false;
+
+            // Collapse all tree nodes except level0
+            document.querySelectorAll('.tree-children').forEach(container => {
+                if (container.id === 'children-level0') {
+                    container.classList.add('expanded');
+                } else {
+                    container.classList.remove('expanded');
+                }
+            });
+
+            // Reset all expand icons
+            document.querySelectorAll('.tree-expand').forEach(icon => {
+                if (icon.textContent !== '■') {
+                    // Keep level0 expanded
+                    const nodeRow = icon.closest('[data-node-id]');
+                    if (nodeRow && nodeRow.dataset.nodeId === 'level0') {
+                        icon.textContent = '▼';
+                    } else {
+                        icon.textContent = '▶';
+                    }
+                }
+            });
+
+            // Remove selection highlighting
+            document.querySelectorAll('.tree-row').forEach(row => {
+                row.classList.remove('selected');
+            });
+
+            // Remove indicators
+            document.querySelectorAll('.click-indicator-box').forEach(indicator => {
+                indicator.remove();
+            });
+
+            // Reset clickable span
+            const clickableSpan = document.querySelector('.birgda-clickable');
+            if (clickableSpan) {
+                clickableSpan.style.pointerEvents = 'auto';
+                clickableSpan.style.backgroundColor = 'transparent';
+            }
+        }
+
+        // ==========================================================================
+        // STEP NAVIGATION FUNCTIONS
+        // ==========================================================================
+
+        function updateProgress() {
+            for (let i = 0; i < totalSteps; i++) {
+                const progStep = document.getElementById('prog' + i);
+                if (i < currentStep) {
+                    progStep.classList.add('completed');
+                    progStep.classList.remove('active');
+                    if (i > 0) progStep.textContent = '✓';
+                } else if (i === currentStep) {
+                    progStep.classList.add('active');
+                    progStep.classList.remove('completed');
+                } else {
+                    progStep.classList.remove('active', 'completed');
+                }
+            }
+        }
+
+        function showStep(step) {
+            document.querySelectorAll('.sap-step-container').forEach(container => {
+                container.classList.remove('active');
+            });
+
+            document.getElementById('step' + step).classList.add('active');
+
+            // Update navigation
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            prevBtn.style.display = step === 0 ? 'none' : 'block';
+
+            if (step === totalSteps - 1) {
+                nextBtn.textContent = 'Byrja aftur';
+                nextBtn.onclick = () => {
+                    currentStep = 0;
+                    resetTreeState();
+                    showStep(0);
+                };
+            } else {
+                nextBtn.textContent = 'Næsta skref →';
+                nextBtn.onclick = nextStep;
+            }
+
+            updateProgress();
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps - 1) {
+                currentStep++;
+                showStep(currentStep);
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                showStep(currentStep);
+                window.scrollTo(0, 0);
+            }
+        }
+
+        // ==========================================================================
+        // INTERACTIVE FUNCTIONS FOR SPECIFIC STEPS
+        // ==========================================================================
+
+        // Interactive functions for Step 1
+        function checkCommand() {
+            const input = document.getElementById('commandField');
+            if (input.value.toUpperCase() === 'IH01' || input.value === '/nIH01') {
+                input.classList.add('highlight-field');
+                setTimeout(() => {
+                    alert('Rétt! IH01 glugginn opnast.');
+                    nextStep();
+                }, 500);
+            } else {
+                alert('Sláðu inn IH01 eða /nIH01 í skipanasvæðið.');
+                input.focus();
+            }
+        }
+
+        // Interactive functions for Step 2
+        function showMaterialList() {
+            const locationInput = document.getElementById('LocationInput');
+            if (locationInput.value === '2900') {
+                locationInput.classList.add('highlight-field');
+                setTimeout(() => {
+                    alert('Rétt! Uppbyggin staðsetningar tré opnast.');
+                    nextStep();
+                }, 500);
+            } else {
+                alert('Sláðu inn 2900 í verksmiðju reitinn');
+                locationInput.focus();
+            }
+        }
+
+        // Interactive functions for Step 4 - Dropdown menus
+        function showFaraDropdown() {
+            clearTimeout(faraDropdownTimeout);
+            const dropdown = document.getElementById('faraDropdown');
+            if (dropdown) {
+                dropdown.classList.add('show');
+            }
+        }
+
+        function hideFaraDropdown() {
+            faraDropdownTimeout = setTimeout(() => {
+                const dropdown = document.getElementById('faraDropdown');
+                if (dropdown) {
+                    dropdown.classList.remove('show');
+                }
+                hideStofnaSubmenu();
+            }, 200);
+        }
+
+        function keepFaraDropdown() {
+            clearTimeout(faraDropdownTimeout);
+        }
+
+        function showStofnaSubmenu() {
+            clearTimeout(stofnaSubmenuTimeout);
+            const submenu = document.getElementById('stofnaSubmenu');
+            if (submenu) {
+                submenu.style.display = 'block';
+            }
+        }
+
+        function hideStofnaSubmenu() {
+            stofnaSubmenuTimeout = setTimeout(() => {
+                const submenu = document.getElementById('stofnaSubmenu');
+                if (submenu) {
+                    submenu.style.display = 'none';
+                }
+            }, 200);
+        }
+
+        function keepStofnaSubmenu() {
+            clearTimeout(stofnaSubmenuTimeout);
+        }
+
+        function selectAlmennt() {
+            alert('Þú valdir "Almennt" - Create PM Notification glugginn opnast.');
+            nextStep();
+        }
+
+        // ==========================================================================
+        // POPUP FUNCTIONS FOR STEP 5
+        // ==========================================================================
+
+        function showObjectInfoPopup() {
+            const popup = document.getElementById('objectInfoPopup');
+            if (popup) {
+                popup.style.display = 'block';
+            }
+        }
+
+        function closeObjectInfoPopup() {
+            const popup = document.getElementById('objectInfoPopup');
+            if (popup) {
+                popup.style.display = 'none';
+            }
+        }
+
+        function confirmObjectInfo() {
+            closeObjectInfoPopup();
+            alert('Rétt! Object information hefur verið staðfest.');
+            nextStep();
+        }
+
+        function closeIfClickedOutside(event) {
+            if (event.target.id === 'objectInfoPopup') {
+                closeObjectInfoPopup();
+            }
+        }
+
+        // ==========================================================================
+        // EVENT LISTENERS
+        // ==========================================================================
+
+        // Add Enter key listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Step 1 - Command field Enter key
+            const commandField = document.getElementById('commandField');
+            if (commandField) {
+                commandField.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        checkCommand();
+                    }
+                });
+            }
+
+            // Step 2 - Location input Enter key
+            const locationInput = document.getElementById('LocationInput');
+            if (locationInput) {
+                locationInput.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        showMaterialList();
+                    }
+                });
+            }
+
+            // Step 5 - Global Enter key listener for the entire step
+            document.addEventListener('keypress', function(event) {
+                if (currentStep === 5 && event.key === 'Enter') {
+                    event.preventDefault();
+                    const popup = document.getElementById('objectInfoPopup');
+                    if (popup && popup.style.display === 'block') {
+                        // Popup is open, so confirm it
+                        confirmObjectInfo();
+                    } else {
+                        // Popup is not open, so show it
+                        showObjectInfoPopup();
+                    }
+                }
+            });
+        });
+
+        // ==========================================================================
+        // INITIALIZATION
+        // ==========================================================================
+
+        // Initialize the application
+        expandedNodes.add('level0'); // Start with level0 expanded
+        showStep(0);
+    </script>
+</body>
+</html>
