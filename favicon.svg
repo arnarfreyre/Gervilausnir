@@ -1,0 +1,40 @@
+
+
+  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- Background -->
+  <rect x="0" y="0" width="32" height="32" rx="4" ry="4" fill="#000022" />
+
+  <!-- Stars -->
+  <circle cx="5" cy="7" r="0.8" fill="white" opacity="0.7" />
+  <circle cx="12" cy="5" r="0.6" fill="white" opacity="0.5" />
+  <circle cx="25" cy="8" r="0.7" fill="white" opacity="0.6" />
+  <circle cx="28" cy="15" r="0.5" fill="white" opacity="0.8" />
+
+  <!-- Platform base -->
+  <rect x="2" y="24" width="28" height="6" rx="2" ry="2" fill="#4c6baf" />
+
+  <!-- Ice platform with glow -->
+  <rect x="22" y="18" width="8" height="6" rx="1" ry="1" fill="#6d8ad0" />
+  <rect x="23" y="18" width="6" height="2" rx="1" ry="1" fill="#b0e0ff" opacity="0.5" />
+
+  <!-- Spike -->
+  <path d="M6 18 L10 18 L8 14 z" fill="#d03535" />
+  <path d="M6.8 18 L9.2 18 L8 15 Z" fill="#ff5555" />
+
+  <!-- Bounce pad -->
+  <rect x="14" y="20" width="6" height="4" rx="1" ry="1" fill="#555555" />
+  <rect x="15" y="20" width="4" height="2" rx="1" ry="1" fill="#ffffff" opacity="0.5" />
+
+  <!-- Character body -->
+  <rect x="12" y="12" width="8" height="12" rx="2" ry="2" fill="#445BAF" />
+
+
+
+  <!-- Character eyes -->
+  <circle cx="14" cy="16" r="1.5" fill="white" />
+  <circle cx="18" cy="16" r="1.5" fill="white" />
+
+  <!-- Goal sparkle -->
+  <path d="M28 22 L29 23 L28 24 L27 23 Z" fill="#ffff00" fill-opacity="0.9" />
+  <circle cx="28" cy="23" r="0.5" fill="#ffffff" />
+</svg>
