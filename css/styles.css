@@ -1,0 +1,305 @@
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #111;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: 'Courier New', Courier, monospace;
+        color: white;
+        overflow: hidden;
+    }
+
+    .game-container {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(109, 138, 208, 0.6);
+    background-color: #000033; /* Same as the floor background color */
+}
+
+    canvas {
+    background-color: #000022;
+    image-rendering: pixelated;
+    display: block; /* Removes any extra space below canvas */
+}
+
+    .ui {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.6);
+        border-radius: 5px;
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    .menu {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.85);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+    }
+
+    button {
+        background-color: #4c6baf;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        margin: 10px;
+        font-size: 18px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-family: 'Courier New', Courier, monospace;
+        transition: all 0.2s ease;
+        min-width: 200px;
+        text-align: center;
+    }
+
+    button:hover {
+        background-color: #6d8ad0;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    button:active {
+        transform: translateY(0);
+        box-shadow: none;
+    }
+
+    .back-button {
+        margin-top: 20px;
+        background-color: #555;
+        min-width: 150px;
+    }
+
+    .back-button:hover {
+        background-color: #777;
+    }
+
+    h1, h2 {
+        color: #6d8ad0;
+        text-align: center;
+        margin-bottom: 20px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+        font-size: 48px;
+        margin-bottom: 10px;
+    }
+
+    .level-grid {
+    background-color: #000022; /* Match your sky color */
+    }
+
+    .level-info {
+        margin-bottom: 30px;
+        text-align: center;
+        font-size: 18px;
+        color: #aaa;
+    }
+
+    .controls-info {
+        margin-top: 30px;
+        font-size: 14px;
+        text-align: center;
+        color: #888;
+    }
+
+    .level-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 600px;
+        margin-bottom: 20px;
+    }
+
+    .level-button {
+        background-color: #4c6baf;
+        width: 60px;
+        height: 60px;
+        margin: 8px;
+        font-size: 24px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: unset;
+        padding: 0;
+    }
+
+    .level-button.locked {
+        background-color: #555;
+        color: #777;
+        cursor: not-allowed;
+    }
+
+    .level-button.completed {
+        background-color: #41a547;
+    }
+
+    .level-stats {
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 15px 25px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        text-align: center;
+        line-height: 1.6;
+        font-size: 18px;
+    }
+
+    /* Settings menu styles */
+    .settings-container {
+        background-color: rgba(30, 30, 50, 0.7);
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        width: 80%;
+        max-width: 500px;
+    }
+
+    .setting {
+        margin: 15px 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .setting label {
+        width: 140px;
+        font-size: 16px;
+    }
+
+    .setting input[type="range"] {
+        flex-grow: 1;
+        margin: 0 10px;
+        height: 8px;
+        background-color: #333;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    .setting input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        background-color: #6d8ad0;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .setting span {
+        width: 50px;
+        text-align: right;
+    }
+
+    .setting.checkbox {
+        display: flex;
+        align-items: center;
+    }
+    .export-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    }
+
+    .export-buttons button {
+        flex: 1;
+        padding: 10px;
+    }
+
+    /* Add a style for the format selector */
+    .export-format {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .export-format label {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .setting.checkbox input {
+        margin-right: 10px;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+
+        #export-text, #import-text {
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.4;
+        background-color: #222;
+        color: #ddd;
+        border: 1px solid #444;
+        padding: 10px;
+    }
+
+    /* Add a notice about compatible versions */
+    .import-notice {
+        background-color: #333;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        font-size: 14px;
+        color: #aaa;
+        border-left: 4px solid #6d8ad0;
+    }
+
+    /* Make the modals more responsive */
+    @media (max-width: 768px) {
+        .modal-content {
+            width: 95%;
+            padding: 15px;
+        }
+
+        .export-buttons {
+            flex-direction: column;
+        }
+    }
+
+    .setting.checkbox label {
+        cursor: pointer;
+    }
+
+    /* Pixel transition */
+    @keyframes pixelFadeIn {
+        0% {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .menu {
+        animation: pixelFadeIn 0.3s ease forwards;
+    }
+
+    /* FPS Counter */
+    .fps-counter {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background-color: rgba(0, 0, 0, 0.6);
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        color: #aaa;
+        z-index: 10;
+    }
