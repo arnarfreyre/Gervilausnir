@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAP Leiðbeiningar - Kennslugátt</title>
+    <link rel="stylesheet" href="Main-styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
+
+            <div class="logo">
+                <span>📚</span>
+                <span>SAP Leiðbeiningar</span>
+            </div>
+
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-box" id="searchBox" placeholder="Leita að leiðbeiningum...">
+            </div>
+
+            <div class="user-menu">
+                <button style="background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem;">👤</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <!-- Home Navigation Item -->
+            <div class="home-nav-item active" id="homeNavItem" onclick="showHomeScreen()">
+                <span>🏠</span>
+                <span>Heim</span>
+            </div>
+
+            <div class="sidebar-header">
+                <h3>Flokkar</h3>
+            </div>
+            <div class="category-list" id="categoryList">
+                <!-- Categories will be dynamically generated here -->
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content-area">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb" id="breadcrumb">
+                <span class="breadcrumb-item" onclick="showHomeScreen()">Heim</span>
+            </div>
+
+            <!-- Content Header -->
+            <div class="content-header">
+                <h1 class="content-title" id="contentTitle">Birgðir - Frátektir</h1>
+                <p class="content-description" id="contentDescription">Leiðbeiningar um hvernig á að vinna með frátektir í SAP kerfinu</p>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar" id="filterBar">
+                <div class="filter-group">
+                    <span class="filter-label">Flokka eftir:</span>
+                    <select class="filter-select" id="sortSelect">
+                        <option value="newest">Nýjast fyrst</option>
+                        <option value="popular">Vinsælast</option>
+                        <option value="difficulty">Erfiðleikastigi</option>
+                        <option value="duration">Tímalengd</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-label">Erfiðleiki:</span>
+                    <select class="filter-select" id="difficultySelect">
+                        <option value="all">Allir</option>
+                        <option value="beginner">Byrjandi</option>
+                        <option value="intermediate">Miðlungs</option>
+                        <option value="advanced">Háþróaður</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Home Content (hidden by default) -->
+            <div id="homeContent" style="display: none;">
+                <!-- Content will be dynamically inserted here -->
+            </div>
+
+            <!-- Manuals Grid -->
+            <div class="manuals-grid" id="manualsGrid">
+                <!-- Manual cards will be dynamically inserted here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Manual Viewer Modal -->
+    <div class="manual-viewer" id="manualViewer">
+        <div class="viewer-content">
+            <div class="viewer-header">
+                <h2 class="viewer-title" id="viewerTitle">Leiðbeiningar</h2>
+                <button class="viewer-close" onclick="closeViewer()">✕</button>
+            </div>
+            <div class="viewer-body" id="viewerBody">
+                <iframe class="viewer-iframe" id="viewerFrame"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fab-container" id="fabContainer">
+        <button class="fab" onclick="showAddManualForm()">➕</button>
+    </div>
+
+    <!-- Load external scripts -->
+    <script src="config.js"></script>
+    <script src="manuals.js"></script>
+
+    <!-- Main application script -->
+    <script>
+        // State management
+        let currentManuals = [];
+        let currentCategory = '';
+        let currentSubcategory = '';
+        let currentView = 'home'; // Track current view
+
+        // Initialize the platform
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePlatform();
+        });
+
+        function initializePlatform() {
+            renderCategories();
+
+            // Check if should show home screen or specific category
+            if (config.defaultView === 'home') {
+                showHomeScreen();
+            } else {
+                currentCategory = config.defaultCategory;
+                currentSubcategory = config.defaultSubcategory;
+                renderManuals(manualAPI.getManualsBySubcategory(config.defaultSubcategory));
+                updateBreadcrumb();
+            }
+
+            setupEventListeners();
+
+            // Show/hide FAB based on config
+            if (!config.enableAddButton) {
+                document.getElementById('fabContainer').style.display = 'none';
+            }
+        }
+
+        // Show home screen
+        function showHomeScreen() {
+            currentView = 'home';
+            currentCategory = '';
+            currentSubcategory = '';
+
+            // Update UI
+            document.getElementById('homeNavItem').classList.add('active');
+            document.querySelectorAll('.category-header').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.subcategory-list').forEach(el => el.classList.remove('active'));
+
+            // Hide filter bar and manuals grid
+            document.getElementById('filterBar').style.display = 'none';
+            document.getElementById('manualsGrid').style.display = 'none';
+
+            // Show home content
+            const homeContent = document.getElementById('homeContent');
+            homeContent.style.display = 'block';
+
+            // Update header
+            document.getElementById('contentTitle').textContent = 'SAP Leiðbeiningakerfið';
+            document.getElementById('contentDescription').textContent = 'Allt sem þú þarft að vita um SAP kerfið á einum stað';
+
+            // Update breadcrumb
+            document.getElementById('breadcrumb').innerHTML = '<span>Heim</span>';
+
+            // Render home content
+            renderHomeContent();
+        }
+
+        // Render home screen content
+        function renderHomeContent() {
+            const homeContent = document.getElementById('homeContent');
+
+            // Calculate statistics
+            const totalManuals = manualAPI.manuals.length;
+            const totalCategories = Object.keys(categories).length;
+            const recentManuals = manualAPI.sortManuals(manualAPI.manuals, 'newest').slice(0, 3);
+
+            let html = `
+                <!-- Welcome Section -->
+                <div class="welcome-section">
+                    <h1 class="welcome-title">${uiText.home.welcome}</h1>
+                    <p class="welcome-desc">${uiText.home.welcomeDesc}</p>
+                </div>
+
+                <!-- Statistics -->
+                <div class="home-section">
+                    <h2 class="section-title">${uiText.home.statistics}</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">📚</div>
+                            <div class="stat-number">${totalManuals}</div>
+                            <div class="stat-label">${uiText.home.totalManuals}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📁</div>
+                            <div class="stat-number">${totalCategories}</div>
+                            <div class="stat-label">${uiText.home.categories}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">✅</div>
+                            <div class="stat-number">${manualAPI.manuals.filter(m => m.filename).length}</div>
+                            <div class="stat-label">Tilbúnar leiðbeiningar</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⏱️</div>
+                            <div class="stat-number">${Math.round(manualAPI.manuals.reduce((sum, m) => sum + m.duration, 0) / 60)}</div>
+                            <div class="stat-label">Klst. af efni</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recently Added -->
+                <div class="home-section">
+                    <div class="section-header">
+                        <h2 class="section-title">${uiText.home.recentlyAdded}</h2>
+                        <a href="#" class="view-all-link" onclick="goToAllManuals(); return false;">${uiText.home.viewAll} →</a>
+                    </div>
+                    <div class="manuals-grid">
+                        ${recentManuals.map(manual => createManualCard(manual)).join('')}
+                    </div>
+                </div>
+            `;
+
+            homeContent.innerHTML = html;
+        }
+
+        // Create manual card HTML
+        function createManualCard(manual) {
+            // Check if manual has both HTML and PDF files
+            const hasHTML = manual.filename !== null;
+            const hasPDF = manual.pdfname !== null && manual.pdfname !== undefined;
+
+            // Create button section based on available files
+            let buttonSection = '';
+            if (hasHTML || hasPDF) {
+                buttonSection = '<div class="manual-card-actions">';
+
+                if (hasHTML) {
+                    buttonSection += `
+                        <button class="manual-action-btn" onclick="event.stopPropagation(); openManual(${manual.id}, 'html')">
+                            <span>📄</span> HTML
+                        </button>
+                    `;
+                }
+
+                if (hasPDF) {
+                    buttonSection += `
+                        <button class="manual-action-btn manual-pdf-btn" onclick="event.stopPropagation(); openManual(${manual.id}, 'pdf')">
+                            <span>📑</span> PDF
+                        </button>
+                    `;
+                }
+
+                buttonSection += '</div>';
+            }
+
+            return `
+                <div class="manual-card">
+                    <div class="manual-card-header">
+                        <div class="manual-icon">${manual.icon}</div>
+                        <h3 class="manual-title">${manual.title}</h3>
+                        <p class="manual-category">${categories[manual.category].name}</p>
+                    </div>
+                    <div class="manual-card-body">
+                        <p class="manual-description">${manual.description}</p>
+                        <div class="manual-meta">
+                            <div class="manual-difficulty">
+                                <span class="difficulty-badge difficulty-${manual.difficulty}">
+                                    ${manualAPI.getDifficultyText(manual.difficulty)}
+                                </span>
+                            </div>
+                            <div class="manual-duration">
+                                <span>⏱️</span>
+                                <span>${manual.duration} ${uiText.meta.minutes}</span>
+                            </div>
+                        </div>
+                        ${buttonSection}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Go to all manuals view
+        function goToAllManuals() {
+            currentView = 'all';
+            currentCategory = '';
+            currentSubcategory = '';
+
+            // Update UI
+            document.getElementById('homeNavItem').classList.remove('active');
+            document.getElementById('filterBar').style.display = '';
+            document.getElementById('manualsGrid').style.display = '';
+            document.getElementById('homeContent').style.display = 'none';
+
+            renderManuals(manualAPI.manuals);
+            document.getElementById('breadcrumb').innerHTML = `
+                <span class="breadcrumb-item" onclick="showHomeScreen()">Heim</span>
+                <span>›</span>
+                <span>Allar leiðbeiningar</span>
+            `;
+            document.getElementById('contentTitle').textContent = 'Allar leiðbeiningar';
+            document.getElementById('contentDescription').textContent = 'Skoðaðu allar tiltækar SAP leiðbeiningar';
+        }
+
+        // Render categories in sidebar
+        function renderCategories() {
+            const categoryList = document.getElementById('categoryList');
+            let html = '';
+
+            for (const [key, category] of Object.entries(categories)) {
+                const count = manualAPI.getCategoryCount(key);
+                const isActive = key === currentCategory;
+
+                html += `
+                    <div class="category-item">
+                        <div class="category-header ${isActive ? 'active' : ''}" onclick="toggleCategory('${key}')">
+                            <div style="display: flex; align-items: center;">
+                                <span class="category-icon">${category.icon}</span>
+                                <span class="category-name">${category.name}</span>
+                            </div>
+                            <span class="category-count">${count}</span>
+                        </div>
+                        <div class="subcategory-list ${isActive ? 'active' : ''}" id="${key}">
+                            ${Object.entries(category.subcategories).map(([subKey, subName]) => `
+                                <div class="subcategory-item" onclick="filterBySubcategory('${key}', '${subKey}')">${subName}</div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            categoryList.innerHTML = html;
+        }
+
+        // Render manual cards
+        function renderManuals(manualsToRender) {
+            currentManuals = manualsToRender;
+            const grid = document.getElementById('manualsGrid');
+
+            if (manualsToRender.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <div class="empty-state-icon">📚</div>
+                        <div class="empty-state-title">${uiText.search.noResults}</div>
+                        <div class="empty-state-description">${uiText.search.noResultsDesc}</div>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = manualsToRender.map(manual => createManualCard(manual)).join('');
+        }
+
+        // Toggle category expansion
+        function toggleCategory(categoryId) {
+            currentView = 'category';
+
+            // Update home nav item
+            document.getElementById('homeNavItem').classList.remove('active');
+
+            // Show filter bar and grid
+            document.getElementById('filterBar').style.display = '';
+            document.getElementById('manualsGrid').style.display = '';
+            document.getElementById('homeContent').style.display = 'none';
+
+            const categoryList = document.getElementById(categoryId);
+            const header = categoryList.previousElementSibling;
+
+            // Close all other categories
+            document.querySelectorAll('.subcategory-list').forEach(list => {
+                if (list.id !== categoryId) {
+                    list.classList.remove('active');
+                    list.previousElementSibling.classList.remove('active');
+                }
+            });
+
+            // Toggle current category
+            categoryList.classList.toggle('active');
+            header.classList.toggle('active');
+
+            currentCategory = categoryId;
+        }
+
+        // Filter by subcategory
+        function filterBySubcategory(category, subcategory) {
+            currentView = 'subcategory';
+            currentCategory = category;
+            currentSubcategory = subcategory;
+
+            // Update home nav item
+            document.getElementById('homeNavItem').classList.remove('active');
+
+            // Show filter bar and grid
+            document.getElementById('filterBar').style.display = '';
+            document.getElementById('manualsGrid').style.display = '';
+            document.getElementById('homeContent').style.display = 'none';
+
+            const filtered = manualAPI.getManualsBySubcategory(subcategory);
+            renderManuals(filtered);
+            updateBreadcrumb();
+            updateContentHeader(category, subcategory);
+        }
+
+        // Update breadcrumb
+        function updateBreadcrumb() {
+            const breadcrumb = document.getElementById('breadcrumb');
+            const categoryName = categories[currentCategory]?.name || '';
+            const subcategoryName = categories[currentCategory]?.subcategories[currentSubcategory] || '';
+
+            if (categoryName && subcategoryName) {
+                breadcrumb.innerHTML = `
+                    <span class="breadcrumb-item" onclick="showHomeScreen()">${uiText.breadcrumb.home}</span>
+                    <span>›</span>
+                    <span class="breadcrumb-item">${categoryName}</span>
+                    <span>›</span>
+                    <span>${subcategoryName}</span>
+                `;
+            } else {
+                breadcrumb.innerHTML = `<span onclick="showHomeScreen()" style="cursor: pointer;">${uiText.breadcrumb.home}</span>`;
+            }
+        }
+
+        // Update content header
+        function updateContentHeader(category, subcategory) {
+            const title = document.getElementById('contentTitle');
+            const description = document.getElementById('contentDescription');
+
+            const categoryName = categories[category]?.name || '';
+            const subcategoryName = categories[category]?.subcategories[subcategory] || '';
+
+            title.textContent = `${categoryName} - ${subcategoryName}`;
+            description.textContent = `Leiðbeiningar um ${subcategoryName.toLowerCase()} í SAP kerfinu`;
+        }
+
+        // Open manual in viewer - Updated to handle both HTML and PDF
+        function openManual(manualId, type = 'html') {
+            const manual = manualAPI.getManualById(manualId);
+            if (!manual) return;
+
+            const viewer = document.getElementById('manualViewer');
+            const viewerBody = document.getElementById('viewerBody');
+            const title = document.getElementById('viewerTitle');
+
+            // Update title
+            title.textContent = manual.title;
+
+            // Remove existing iframe and create new one
+            viewerBody.innerHTML = '';
+            const newFrame = document.createElement('iframe');
+            newFrame.className = 'viewer-iframe';
+            newFrame.id = 'viewerFrame';
+            viewerBody.appendChild(newFrame);
+
+            // Check which type to display
+            if (type === 'pdf' && manual.pdfname) {
+                // Display PDF
+                const timestamp = new Date().getTime();
+                newFrame.src = config.pdfPath + manual.pdfname + '?t=' + timestamp;
+            } else if (type === 'html' && manual.filename) {
+                // Display HTML
+                const timestamp = new Date().getTime();
+                newFrame.src = config.instructionsPath + manual.filename + '?t=' + timestamp;
+            } else {
+                // Show placeholder for manuals without instruction files yet
+                newFrame.srcdoc = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <style>
+                            body {
+                                font-family: Arial, sans-serif;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                height: 100vh;
+                                margin: 0;
+                                text-align: center;
+                                background-color: #f5f5f5;
+                            }
+                            .placeholder {
+                                padding: 2rem;
+                                background: white;
+                                border-radius: 8px;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                            }
+                            .icon { font-size: 4rem; margin-bottom: 1rem; }
+                            h2 { color: #333; margin-bottom: 1rem; }
+                            p { color: #666; margin-bottom: 0.5rem; }
+                            .meta {
+                                margin-top: 2rem;
+                                padding-top: 1rem;
+                                border-top: 1px solid #ddd;
+                                color: #999;
+                                font-size: 0.9rem;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="placeholder">
+                            <div class="icon">${manual.icon}</div>
+                            <h2>${manual.title}</h2>
+                            <p>${uiText.viewer.notReady}</p>
+                            <p>${uiText.viewer.inProgress}</p>
+                            <div class="meta">
+                                <p>${uiText.meta.time}: ${manual.duration} ${uiText.meta.minutes}</p>
+                                <p>${uiText.filters.difficulty}: ${manualAPI.getDifficultyText(manual.difficulty)}</p>
+                                <p>${uiText.meta.keywords}: ${manual.tags.join(', ')}</p>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                `;
+            }
+
+            // Show the modal
+            viewer.classList.add('active');
+            manualAPI.incrementViews(manualId);
+        }
+
+        // Close viewer
+        function closeViewer() {
+            const viewer = document.getElementById('manualViewer');
+            const viewerBody = document.getElementById('viewerBody');
+
+            // Remove active class
+            viewer.classList.remove('active');
+
+            // Completely remove iframe after modal closes
+            setTimeout(() => {
+                viewerBody.innerHTML = '';
+            }, 300); // Wait for CSS transition to complete
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Search
+            const searchBox = document.getElementById('searchBox');
+            let searchTimeout;
+
+            searchBox.addEventListener('input', function(e) {
+                clearTimeout(searchTimeout);
+                const query = e.target.value;
+
+                if (query.length < config.minSearchLength && query.length > 0) return;
+
+                searchTimeout = setTimeout(() => {
+                    if (query === '') {
+                        // Return to previous view
+                        if (currentView === 'home') {
+                            showHomeScreen();
+                        } else if (currentView === 'subcategory') {
+                            renderManuals(manualAPI.getManualsBySubcategory(currentSubcategory));
+                        } else {
+                            renderManuals(manualAPI.manuals);
+                        }
+                    } else {
+                        // Show search results
+                        document.getElementById('filterBar').style.display = '';
+                        document.getElementById('manualsGrid').style.display = '';
+                        document.getElementById('homeContent').style.display = 'none';
+
+                        const results = manualAPI.searchManuals(query);
+                        renderManuals(results);
+
+                        // Update breadcrumb for search
+                        document.getElementById('breadcrumb').innerHTML = `
+                            <span class="breadcrumb-item" onclick="showHomeScreen()">Heim</span>
+                            <span>›</span>
+                            <span>Leitarniðurstöður</span>
+                        `;
+                    }
+                }, config.searchDelay);
+            });
+
+            // Sort
+            const sortSelect = document.getElementById('sortSelect');
+            sortSelect.addEventListener('change', function(e) {
+                const sorted = manualAPI.sortManuals(currentManuals, e.target.value);
+                renderManuals(sorted);
+            });
+
+            // Difficulty filter
+            const difficultySelect = document.getElementById('difficultySelect');
+            difficultySelect.addEventListener('change', function(e) {
+                let filtered;
+                if (currentView === 'home' || currentView === 'all') {
+                    filtered = e.target.value === 'all'
+                        ? manualAPI.manuals
+                        : manualAPI.manuals.filter(m => m.difficulty === e.target.value);
+                } else {
+                    filtered = e.target.value === 'all'
+                        ? manualAPI.getManualsBySubcategory(currentSubcategory)
+                        : currentManuals.filter(m => m.difficulty === e.target.value);
+                }
+                renderManuals(filtered);
+            });
+
+            // Mobile menu
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            mobileMenuToggle.addEventListener('click', function() {
+                document.getElementById('sidebar').classList.toggle('active');
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeViewer();
+                }
+                if (e.ctrlKey && e.key === 'k') {
+                    e.preventDefault();
+                    searchBox.focus();
+                }
+            });
+
+            // Close viewer when clicking outside
+            document.getElementById('manualViewer').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeViewer();
+                }
+            });
+        }
+
+        // Show add manual form
+        function showAddManualForm() {
+            if (config.enableAddButton) {
+                alert('Hér myndi formið til að bæta við nýjum leiðbeiningum birtast.\n\nÞú gætir hlaðið upp HTML skrá eða búið til nýjar leiðbeiningar.');
+            }
+        }
+
+        // Public API for the platform
+        window.sapPlatform = {
+            addNewManual: function(manualData) {
+                const newManual = manualAPI.addNewManual(manualData);
+                renderCategories(); // Update counts
+                if (currentView === 'home') {
+                    renderHomeContent();
+                } else {
+                    renderManuals(manualAPI.manuals);
+                }
+                return newManual;
+            },
+            getManuals: () => manualAPI.manuals,
+            getCategories: () => categories,
+            refreshView: () => {
+                if (currentView === 'home') {
+                    renderHomeContent();
+                } else {
+                    renderManuals(currentManuals);
+                }
+            },
+            updateCounts: () => renderCategories()
+        };
+    </script>
+</body>
+</html>
