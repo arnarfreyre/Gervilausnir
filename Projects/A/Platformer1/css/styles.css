@@ -303,3 +303,281 @@
         color: #aaa;
         z-index: 10;
     }
+
+    /*Online stuff*/
+
+    .level-tabs {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+        padding: 5px;
+    }
+
+    .tab-button {
+        background-color: transparent;
+        border: none;
+        color: #888;
+        padding: 10px 20px;
+        margin: 0 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-radius: 5px;
+        min-width: auto;
+    }
+
+    .tab-button.active {
+        background-color: #4c6baf;
+        color: white;
+    }
+
+    .tab-button:hover:not(.active) {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .tab-content {
+        display: none;
+        width: 100%;
+        max-width: 800px;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    .filter-controls {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .filter-select {
+        background-color: #333;
+        color: white;
+        border: 1px solid #555;
+        padding: 8px 15px;
+        border-radius: 5px;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    .online-levels-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+        padding: 10px;
+    }
+
+    .online-level-card {
+        background-color: rgba(30, 30, 50, 0.8);
+        border: 2px solid #4c6baf;
+        border-radius: 8px;
+        padding: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .online-level-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(76, 107, 175, 0.5);
+        border-color: #6d8ad0;
+    }
+
+    .level-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .level-card-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #6d8ad0;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .difficulty-badge {
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .difficulty-easy { background-color: #41a547; }
+    .difficulty-medium { background-color: #f39c12; }
+    .difficulty-hard { background-color: #e74c3c; }
+    .difficulty-extreme { background-color: #8b0000; }
+
+    .level-card-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+        font-size: 14px;
+        color: #aaa;
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .level-card-author {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #888;
+        font-style: italic;
+    }
+
+    .load-more-button {
+        display: block;
+        margin: 20px auto;
+        background-color: #555;
+    }
+
+    .featured-section {
+        margin-bottom: 30px;
+    }
+
+    .featured-section h3 {
+        color: #6d8ad0;
+        margin-bottom: 15px;
+    }
+
+    .featured-levels-list {
+        display: flex;
+        gap: 15px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+
+    .search-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .search-input {
+        background-color: #333;
+        color: white;
+        border: 1px solid #555;
+        padding: 10px;
+        border-radius: 5px;
+        width: 300px;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    .search-button {
+        min-width: 100px;
+    }
+
+    /* Level Details Modal */
+    .level-details {
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .level-info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin: 20px 0;
+        background-color: rgba(0, 0, 0, 0.3);
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .info-label {
+        font-weight: bold;
+        color: #6d8ad0;
+    }
+
+    .level-preview {
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    .level-preview canvas {
+        border: 2px solid #4c6baf;
+        border-radius: 8px;
+        max-width: 100%;
+        height: auto;
+    }
+
+    .level-actions {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .star-rating {
+        display: flex;
+        gap: 3px;
+    }
+
+    .star-rating span {
+        color: #ffd700;
+    }
+
+    .rating-interface {
+        text-align: center;
+        margin-top: 20px;
+        padding: 15px;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+    }
+
+    .star-rating-input {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 15px 0;
+    }
+
+    .star-rating-input .star {
+        font-size: 30px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .star-rating-input .star:hover,
+    .star-rating-input .star.selected {
+        color: #ffd700;
+        transform: scale(1.2);
+    }
+
+    /* Scrollbar styling */
+    .tab-content::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .tab-content::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 4px;
+    }
+
+    .tab-content::-webkit-scrollbar-thumb {
+        background: #4c6baf;
+        border-radius: 4px;
+    }
+
+    .tab-content::-webkit-scrollbar-thumb:hover {
+        background: #6d8ad0;
+    }

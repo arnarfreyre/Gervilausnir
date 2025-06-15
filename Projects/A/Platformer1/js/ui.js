@@ -47,6 +47,11 @@ class UIManager {
         this.levelTime = document.getElementById('levelTime');
 
         this.setupEventListeners();
+
+        this.onlineLevelsButton = document.getElementById('onlineLevelsButton');
+
+        // Initialize online browser
+        this.onlineBrowser = null;
     }
 
     setupEventListeners() {
@@ -125,8 +130,20 @@ class UIManager {
         if (this.sfxVolumeSlider) {
             this.sfxVolumeSlider.addEventListener('input', () => this.updateVolumeDisplay());
         }
+        if (this.onlineLevelsButton) {
+        this.onlineLevelsButton.addEventListener('click', () => {
+            this.showOnlineLevels();});
+        }
     }
 
+    showOnlineLevels() {
+    if (!this.onlineBrowser) {
+        this.onlineBrowser = new window.OnlineLevelBrowser(this, this.gameManager);
+    }
+
+    this.hideAllMenus();
+    this.onlineBrowser.show();
+    }
     // Initialize the level select menu with buttons for each level
     initLevelSelectMenu() {
         console.log("Initializing level select menu");

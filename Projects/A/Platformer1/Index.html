@@ -29,6 +29,7 @@
                 <button id="levelSelectButton" aria-label="Open level select screen">Level Select</button>
                 <button id="settingsButton" aria-label="Open settings menu">Settings</button>
                 <button id="levelEditorButton" aria-label="Open level editor">Level Editor</button>
+                <button id="onlineLevelsButton">Online Levels</button>
             </nav>
             <div class="controls-info">
                 Controls: Arrow keys to move, Space or Up Arrow to jump
@@ -41,6 +42,137 @@
             <div id="levelButtons" class="level-buttons" role="menu"></div>
             <button id="backFromLevelSelect" class="back-button" aria-label="Return to main menu">Back</button>
         </section>
+
+        <!-- Add this to your index.html after the level select menu -->
+
+<!-- Online Levels Menu -->
+<section class="menu" id="onlineLevelsMenu" style="display: none;" role="dialog" aria-labelledby="onlineLevelsTitle">
+    <h2 id="onlineLevelsTitle">Online Levels</h2>
+
+    <!-- Tab Navigation -->
+    <div class="level-tabs">
+        <button class="tab-button active" data-tab="browse">Browse All</button>
+        <button class="tab-button" data-tab="featured">Featured</button>
+        <button class="tab-button" data-tab="search">Search</button>
+        <button class="tab-button" data-tab="my-levels">My Levels</button>
+    </div>
+
+    <!-- Browse Tab -->
+    <div id="browseTab" class="tab-content active">
+        <div class="filter-controls">
+            <select id="sortBy" class="filter-select">
+                <option value="createdAt">Newest</option>
+                <option value="plays">Most Played</option>
+                <option value="rating">Highest Rated</option>
+                <option value="completions">Most Completed</option>
+            </select>
+
+            <select id="difficultyFilter" class="filter-select">
+                <option value="">All Difficulties</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+                <option value="extreme">Extreme</option>
+            </select>
+        </div>
+
+        <div id="onlineLevelsList" class="online-levels-list">
+            <!-- Levels will be loaded here -->
+        </div>
+
+        <button id="loadMoreLevels" class="load-more-button">Load More</button>
+    </div>
+
+    <!-- Featured Tab -->
+    <div id="featuredTab" class="tab-content">
+        <div class="featured-section">
+            <h3>🔥 Most Popular</h3>
+            <div id="popularLevels" class="featured-levels-list"></div>
+        </div>
+
+        <div class="featured-section">
+            <h3>⭐ Top Rated</h3>
+            <div id="topRatedLevels" class="featured-levels-list"></div>
+        </div>
+
+        <div class="featured-section">
+            <h3>🆕 Recently Added</h3>
+            <div id="recentLevels" class="featured-levels-list"></div>
+        </div>
+    </div>
+
+    <!-- Search Tab -->
+    <div id="searchTab" class="tab-content">
+        <div class="search-container">
+            <input type="text" id="levelSearchInput" placeholder="Search by level name..." class="search-input">
+            <button id="searchButton" class="search-button">Search</button>
+        </div>
+
+        <div id="searchResults" class="online-levels-list"></div>
+    </div>
+
+    <!-- My Levels Tab -->
+    <div id="myLevelsTab" class="tab-content">
+        <div id="myLevelsList" class="online-levels-list"></div>
+        <p class="no-levels-message" style="display: none;">You haven't created any online levels yet.</p>
+    </div>
+
+    <button id="backFromOnlineLevels" class="back-button" aria-label="Return to main menu">Back</button>
+</section>
+
+<!-- Level Details Modal -->
+<div id="levelDetailsModal" class="modal" style="display: none;">
+    <div class="modal-content level-details">
+        <span class="close" id="levelDetailsClose">&times;</span>
+        <h2 id="levelDetailsName"></h2>
+
+        <div class="level-info-grid">
+            <div class="info-item">
+                <span class="info-label">Author:</span>
+                <span id="levelDetailsAuthor"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Difficulty:</span>
+                <span id="levelDetailsDifficulty"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Plays:</span>
+                <span id="levelDetailsPlays"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Completions:</span>
+                <span id="levelDetailsCompletions"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Rating:</span>
+                <div id="levelDetailsRating" class="star-rating"></div>
+            </div>
+        </div>
+
+        <div class="level-preview">
+            <canvas id="levelPreviewCanvas" width="400" height="320"></canvas>
+        </div>
+
+        <div class="level-actions">
+            <button id="playOnlineLevel" class="play-button">Play Level</button>
+            <button id="rateLevelButton" class="rate-button">Rate Level</button>
+        </div>
+
+        <!-- Rating Interface -->
+        <div id="ratingInterface" class="rating-interface" style="display: none;">
+            <p>Rate this level:</p>
+            <div class="star-rating-input">
+                <span class="star" data-rating="1">☆</span>
+                <span class="star" data-rating="2">☆</span>
+                <span class="star" data-rating="3">☆</span>
+                <span class="star" data-rating="4">☆</span>
+                <span class="star" data-rating="5">☆</span>
+            </div>
+            <button id="submitRating">Submit Rating</button>
+        </div>
+    </div>
+</div>
+
 
         <!-- Settings Menu -->
         <section class="menu" id="settingsMenu" style="display: none;" role="dialog" aria-labelledby="settingsTitle">
@@ -120,6 +252,11 @@
             <li><kbd>R</kbd>: Restart level</li>
         </ul>
     </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/level-api.js"></script>
 
     <!-- Load constants first as a standard script (not module) -->
     <script src="js/constants.js"></script>
