@@ -6,5 +6,7 @@
     </content>
     <orderEntry type="jdk" jdkName="Python 3.12 (Gervilausnir)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="firebase-firestore-compat" level="application" />
+    <orderEntry type="library" name="firebase-app-compat" level="application" />
   </component>
 </module>
