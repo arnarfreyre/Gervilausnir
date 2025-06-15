@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A fun 2D platformer game with pixel-perfect graphics and an integrated level editor">
+    <meta name="theme-color" content="#4c6baf">
+    <title>Pixel Platformer Game</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="favicon.svg" type="image/x-icon">
+    <!-- Preload critical game assets -->
+    <link rel="preload" href="audio/background_music.mp3" as="audio">
+    <link rel="preload" href="audio/jump.mp3" as="audio">
+</head>
+<body>
+    <main class="game-container" aria-live="polite">
+        <!-- Game Canvas -->
+        <canvas id="gameCanvas" width="800" height="600" aria-label="Game play area" role="img"></canvas>
+
+        <!-- Game UI -->
+        <div class="ui" id="ui" aria-live="polite">Level: 1 | Deaths: 0</div>
+
+        <!-- Main Menu -->
+        <section class="menu" id="mainMenu" role="dialog" aria-labelledby="gameTitle">
+            <h1 id="gameTitle">Pixel Platformer</h1>
+            <div class="level-info">Complete challenging levels with increasing difficulty</div>
+            <nav class="menu-buttons">
+                <button id="playButton" aria-label="Start the game">Play Game</button>
+                <button id="levelSelectButton" aria-label="Open level select screen">Level Select</button>
+                <button id="settingsButton" aria-label="Open settings menu">Settings</button>
+                <button id="levelEditorButton" aria-label="Open level editor">Level Editor</button>
+            </nav>
+            <div class="controls-info">
+                Controls: Arrow keys to move, Space or Up Arrow to jump
+            </div>
+        </section>
+
+        <!-- Level Select Menu -->
+        <section class="menu" id="levelSelectMenu" style="display: none;" role="dialog" aria-labelledby="levelSelectTitle">
+            <h2 id="levelSelectTitle">Level Select</h2>
+            <div id="levelButtons" class="level-buttons" role="menu"></div>
+            <button id="backFromLevelSelect" class="back-button" aria-label="Return to main menu">Back</button>
+        </section>
+
+        <!-- Settings Menu -->
+        <section class="menu" id="settingsMenu" style="display: none;" role="dialog" aria-labelledby="settingsTitle">
+            <h2 id="settingsTitle">Settings</h2>
+            <div class="settings-container">
+                <div class="setting">
+                    <label for="musicVolume">Music Volume:</label>
+                    <input type="range" id="musicVolume" min="0" max="100" value="50" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+                    <span id="musicVolumeValue">50%</span>
+                </div>
+                <div class="setting">
+                    <label for="sfxVolume">SFX Volume:</label>
+                    <input type="range" id="sfxVolume" min="0" max="100" value="70" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70">
+                    <span id="sfxVolumeValue">70%</span>
+                </div>
+                <div class="setting checkbox">
+                    <input type="checkbox" id="showFPS" checked>
+                    <label for="showFPS">Show FPS</label>
+                </div>
+                <div class="setting checkbox">
+                    <input type="checkbox" id="pixelPerfect" checked>
+                    <label for="pixelPerfect">Pixel Perfect Rendering</label>
+                </div>
+            </div>
+            <button id="backFromSettings" class="back-button" aria-label="Return to previous screen">Back</button>
+        </section>
+
+        <!-- Game Over / Level Complete Menu -->
+        <section class="menu" id="gameOverMenu" style="display: none;" role="dialog" aria-labelledby="levelCompleteText">
+            <h2 id="levelCompleteText">Level Complete!</h2>
+            <div id="levelStats" class="level-stats">
+                Deaths: <span id="levelDeaths">0</span><br>
+                Time: <span id="levelTime">00:00</span>
+            </div>
+            <nav class="menu-buttons">
+                <button id="nextLevelButton" aria-label="Proceed to next level">Next Level</button>
+                <button id="restartButton" aria-label="Restart current level">Restart Level</button>
+                <button id="menuButton" aria-label="Return to main menu">Main Menu</button>
+            </nav>
+        </section>
+
+        <!-- Pause Menu -->
+        <section class="menu" id="pauseMenu" style="display: none;" role="dialog" aria-labelledby="pauseTitle">
+            <h2 id="pauseTitle">Game Paused</h2>
+            <nav class="menu-buttons">
+                <button id="resumeButton" aria-label="Resume game">Resume</button>
+                <button id="restartFromPause" aria-label="Restart current level">Restart Level</button>
+                <button id="settingsFromPause" aria-label="Open settings menu">Settings</button>
+                <button id="exitToMenu" aria-label="Exit to main menu">Exit to Menu</button>
+            </nav>
+        </section>
+    </main>
+
+    <!-- Audio elements -->
+    <div class="audio-container" aria-hidden="true">
+        <audio id="bgMusic" preload="auto" loop>
+            <source src="audio/background_music.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="jumpSound" preload="auto">
+            <source src="audio/jump.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="deathSound" preload="auto">
+            <source src="audio/death.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="completeSound" preload="auto">
+            <source src="audio/level_complete.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <!-- Keyboard shortcut help (hidden initially) -->
+    <div id="keyboardHelp" class="keyboard-help" style="display: none;">
+        <h3>Keyboard Shortcuts</h3>
+        <ul>
+            <li><kbd>Arrow Keys</kbd>: Move player</li>
+            <li><kbd>Space</kbd> or <kbd>↑</kbd>: Jump</li>
+            <li><kbd>Esc</kbd>: Pause/Resume</li>
+            <li><kbd>R</kbd>: Restart level</li>
+        </ul>
+    </div>
+
+    <!-- Load constants first as a standard script (not module) -->
+    <script src="js/constants.js"></script>
+
+    <!-- Load non-module scripts -->
+    <script src="js/player.js"></script>
+    <script src="js/renderer.js"></script>
+
+    <!-- Load module scripts -->
+    <script src="js/default_levels.js" type="module"></script>
+    <script src="js/audio.js" type="module"></script>
+    <script src="js/levels.js" type="module"></script>
+    <script src="js/ui.js" type="module"></script>
+    <script src="js/game.js" type="module"></script>
+
+    <!-- Load main entry point last -->
+    <script src="js/app.js" type="module"></script>
+</body>
+</html>
