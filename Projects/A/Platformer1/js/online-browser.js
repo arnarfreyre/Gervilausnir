@@ -375,26 +375,41 @@ class OnlineLevelBrowser {
         if (!this.currentViewedLevel) return;
 
         try {
-            // Load the level
-            await window.levelLoader.loadOnlineLevel(this.currentViewedLevel.id);
+            const level = this.currentViewedLevel;
 
-            // Switch to online levels mode
-            window.levelLoader.switchToOnlineLevels();
-            window.levelLoader.currentOnlineLevelId = this.currentViewedLevel.id;
+            // Parse grid and rotations
+            if (typeof level.grid === 'string') {
+                level.grid = JSON.parse(level.grid);
+            }
+            if (level.spikeRotations && typeof level.spikeRotations === 'string') {
+                level.spikeRotations = JSON.parse(level.spikeRotations);
+            }
 
-            // Close modals and start game
+            // Close UI
             this.closeLevelDetails();
             this.hide();
 
-            // Start the game
-            this.gameManager.startLevel(0); // Index doesn't matter for online levels
+            // Store originals
+            if (!window.originalLevels) {
+                window.originalLevels = JSON.parse(JSON.stringify(window.levelLoader.levels));
+                window.originalLevelNames = [...window.levelLoader.levelNames];
+            }
+
+            // Load level
+            window.levelLoader.levels[0] = level.grid;
+            window.levelLoader.levelNames[0] = level.name;
+            if (level.startPosition && window.levelLoader.playerStartPositions) {
+                window.levelLoader.playerStartPositions[0] = level.startPosition;
+            }
+
+            // Start game
+            this.gameManager.startLevel(0);
 
         } catch (error) {
             console.error('Error loading level:', error);
             this.showError('Failed to load level');
         }
     }
-
     showRatingInterface() {
         document.getElementById('ratingInterface').style.display = 'block';
         document.getElementById('rateLevelButton').style.display = 'none';
