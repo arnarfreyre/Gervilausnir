@@ -32,6 +32,7 @@ class UIManager {
         this.restartFromPause = document.getElementById('restartFromPause');
         this.settingsFromPause = document.getElementById('settingsFromPause');
         this.exitToMenu = document.getElementById('exitToMenu');
+        this.onlineLevelsButton = document.getElementById('onlineLevelsButton');
 
         // Settings elements
         this.musicVolumeSlider = document.getElementById('musicVolume');
