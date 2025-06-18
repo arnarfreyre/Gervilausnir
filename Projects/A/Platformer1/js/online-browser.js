@@ -51,6 +51,15 @@ class OnlineLevelBrowser {
             searchButton.addEventListener('click', () => this.searchLevels());
         }
 
+        const levelDetailsModal = document.getElementById('levelDetailsModal');
+        if (levelDetailsModal) {
+            levelDetailsModal.addEventListener('click', (e) => {
+                if (e.target === levelDetailsModal) {
+                    this.closeLevelDetails();
+                }
+            });
+        }
+
         if (searchInput) {
             searchInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') this.searchLevels();
@@ -367,11 +376,21 @@ class OnlineLevelBrowser {
     }
 
     closeLevelDetails() {
-        document.getElementById('levelDetailsModal').style.display = 'none';
-        this.currentViewedLevel = null;
-    }
+    document.getElementById('levelDetailsModal').style.display = 'none';
+    this.currentViewedLevel = null;
 
-async playSelectedLevel() {
+    // Reset rating interface
+    document.getElementById('ratingInterface').style.display = 'none';
+    document.getElementById('rateLevelButton').style.display = 'inline-block';
+
+    // Clear selected stars
+    document.querySelectorAll('.star-rating-input .star').forEach(star => {
+        star.classList.remove('selected');
+        star.textContent = '☆';
+    });
+}
+
+    async playSelectedLevel() {
         if (!this.currentViewedLevel) return;
 
         try {
@@ -453,7 +472,9 @@ async playSelectedLevel() {
             console.error('Error loading online level:', error);
             this.showError('Failed to load level: ' + error.message);
         }
-    }    showRatingInterface() {
+
+    }
+        showRatingInterface() {
         document.getElementById('ratingInterface').style.display = 'block';
         document.getElementById('rateLevelButton').style.display = 'none';
     }

@@ -271,30 +271,70 @@ class GameManager {
      * Exit to main menu
      */
     exitToMainMenu() {
-        this.gameState.state = GameStates.MENU;
+    this.gameState.state = GameStates.MENU;
 
-        if (this.uiManager) {
-            this.uiManager.showMenu(GameStates.MENU);
+    // Check if we were playing an online level and restore original levels
+    if (window.playingOnlineLevel && window.originalLevels) {
+        // Restore original level data
+        window.levelLoader.levels = window.originalLevels;
+        window.levelLoader.levelNames = window.originalLevelNames;
+        if (window.originalStartPositions) {
+            window.levelLoader.playerStartPositions = window.originalStartPositions;
         }
 
-        audioManager.pauseMusic();
+        // Clean up the online level
+        if (window.onlineLevelIndex !== undefined) {
+            // Remove the online level from the arrays
+            window.levelLoader.levels.splice(window.onlineLevelIndex, 1);
+            window.levelLoader.levelNames.splice(window.onlineLevelIndex, 1);
+            if (window.levelLoader.playerStartPositions &&
+                window.levelLoader.playerStartPositions.length > window.onlineLevelIndex) {
+                window.levelLoader.playerStartPositions.splice(window.onlineLevelIndex, 1);
+            }
+            if (window.levelLoader.spikeRotations &&
+                window.levelLoader.spikeRotations.length > window.onlineLevelIndex) {
+                window.levelLoader.spikeRotations.splice(window.onlineLevelIndex, 1);
+            }
+        }
+
+        // Clear flags
+        delete window.playingOnlineLevel;
+        delete window.onlineLevelIndex;
+        delete window.originalLevels;
+        delete window.originalLevelNames;
+        delete window.originalStartPositions;
     }
+
+    if (this.uiManager) {
+        this.uiManager.showMenu(GameStates.MENU);
+    }
+
+    audioManager.pauseMusic();
+    this.cancelAnimationFrame();
+}
 
     /**
      * Go to next level
      */
     nextLevel() {
-        // Reset deaths counter when completing a level
-        this.gameState.deaths = 0;
+    // Reset deaths counter when completing a level
+    this.gameState.deaths = 0;
 
-        if (levelLoader.currentLevel >= levelLoader.getLevelCount() - 1) {
-            // No more levels, go back to menu
-            this.exitToMainMenu();
-        } else {
-            levelLoader.nextLevel();
-            this.startLevel(levelLoader.currentLevel);
-        }
+    // Check if we're playing an online level
+    if (window.playingOnlineLevel) {
+        // For online levels, return to main menu instead of continuing
+        this.exitToMainMenu();
+        return;
     }
+
+    if (levelLoader.currentLevel >= levelLoader.getLevelCount() - 1) {
+        // No more levels, go back to menu
+        this.exitToMainMenu();
+    } else {
+        levelLoader.nextLevel();
+        this.startLevel(levelLoader.currentLevel);
+    }
+}
 
     /**
      * Restart current level
