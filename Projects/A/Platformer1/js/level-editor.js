@@ -1034,4 +1034,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize the editor
     initEditor();
+
+    window.saveLevels = saveLevels;
+    window.copyLevelMatrix = copyLevelMatrix;
+    window.levels = levels;
+    window.levelNames = levelNames;
+    window.currentLevel = currentLevel;
+    window.playerStartX = playerStartX;
+    window.playerStartY = playerStartY;
+    window.rotationData = rotationData;
+
+    // Also export other functions that might be needed
+    window.showNotification = showNotification;
+    window.updateLevelSelector = updateLevelSelector;
+    window.displayLevel = displayLevel;
 });
