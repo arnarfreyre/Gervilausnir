@@ -15,9 +15,11 @@ class LevelAPI {
                 name: levelData.name,
                 author: levelData.author || 'Anonymous',
                 authorId: levelData.authorId || null,
-                grid: levelData.grid,
+                // Convert grid to JSON string to avoid nested array issue
+                grid: JSON.stringify(levelData.grid),
                 startPosition: levelData.startPosition || { x: 1, y: 12 },
-                spikeRotations: levelData.spikeRotations || null,
+                // Also convert spikeRotations if it exists
+                spikeRotations: levelData.spikeRotations ? JSON.stringify(levelData.spikeRotations) : null,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 plays: 0,
@@ -37,8 +39,10 @@ class LevelAPI {
             throw error;
         }
     }
-
     /**
+     * Get a single level by ID
+     */
+/**
      * Get a single level by ID
      */
     async getLevel(levelId) {
@@ -58,6 +62,16 @@ class LevelAPI {
 
             const levelData = { id: doc.id, ...doc.data() };
 
+            // Parse grid back from JSON string
+            if (typeof levelData.grid === 'string') {
+                levelData.grid = JSON.parse(levelData.grid);
+            }
+
+            // Parse spikeRotations if it exists
+            if (levelData.spikeRotations && typeof levelData.spikeRotations === 'string') {
+                levelData.spikeRotations = JSON.parse(levelData.spikeRotations);
+            }
+
             // Cache the result
             this.cache.set(levelId, {
                 data: levelData,
@@ -73,7 +87,6 @@ class LevelAPI {
             throw error;
         }
     }
-
     /**
      * Get all public levels with pagination
      */
@@ -172,6 +185,9 @@ class LevelAPI {
     /**
      * Update a level
      */
+/**
+     * Update a level
+     */
     async updateLevel(levelId, updates) {
         try {
             const allowedUpdates = ['name', 'grid', 'startPosition', 'spikeRotations',
@@ -180,7 +196,14 @@ class LevelAPI {
             const filteredUpdates = {};
             for (const key of allowedUpdates) {
                 if (updates.hasOwnProperty(key)) {
-                    filteredUpdates[key] = updates[key];
+                    // Convert grid and spikeRotations to JSON strings
+                    if (key === 'grid' && Array.isArray(updates[key])) {
+                        filteredUpdates[key] = JSON.stringify(updates[key]);
+                    } else if (key === 'spikeRotations' && updates[key]) {
+                        filteredUpdates[key] = JSON.stringify(updates[key]);
+                    } else {
+                        filteredUpdates[key] = updates[key];
+                    }
                 }
             }
 
@@ -198,7 +221,6 @@ class LevelAPI {
             throw error;
         }
     }
-
     /**
      * Delete a level
      */
@@ -319,10 +341,23 @@ class LevelAPI {
     }
 
     // Helper methods
+    // Helper methods
     snapshotToArray(snapshot) {
         const array = [];
         snapshot.forEach(doc => {
-            array.push({ id: doc.id, ...doc.data() });
+            const data = { id: doc.id, ...doc.data() };
+
+            // Parse grid if it's a string
+            if (typeof data.grid === 'string') {
+                data.grid = JSON.parse(data.grid);
+            }
+
+            // Parse spikeRotations if it exists and is a string
+            if (data.spikeRotations && typeof data.spikeRotations === 'string') {
+                data.spikeRotations = JSON.parse(data.spikeRotations);
+            }
+
+            array.push(data);
         });
         return array;
     }
