@@ -371,7 +371,7 @@ class OnlineLevelBrowser {
         this.currentViewedLevel = null;
     }
 
-    async playSelectedLevel() {
+async playSelectedLevel() {
         if (!this.currentViewedLevel) return;
 
         try {
@@ -385,32 +385,75 @@ class OnlineLevelBrowser {
                 level.spikeRotations = JSON.parse(level.spikeRotations);
             }
 
-            // Close UI
+            // Close all UI elements
             this.closeLevelDetails();
             this.hide();
+            this.uiManager.hideAllMenus();
 
-            // Store originals
+            // Store originals if not already stored
             if (!window.originalLevels) {
                 window.originalLevels = JSON.parse(JSON.stringify(window.levelLoader.levels));
                 window.originalLevelNames = [...window.levelLoader.levelNames];
+                window.originalStartPositions = window.levelLoader.playerStartPositions ?
+                    JSON.parse(JSON.stringify(window.levelLoader.playerStartPositions)) : [];
             }
 
-            // Load level
-            window.levelLoader.levels[0] = level.grid;
-            window.levelLoader.levelNames[0] = level.name;
-            if (level.startPosition && window.levelLoader.playerStartPositions) {
-                window.levelLoader.playerStartPositions[0] = level.startPosition;
+            // Create a temporary level slot for the online level
+            // We'll use the last slot to avoid interfering with regular progression
+            const onlineLevelIndex = window.levelLoader.levels.length;
+
+            // Add the online level to the level arrays
+            window.levelLoader.levels[onlineLevelIndex] = level.grid;
+            window.levelLoader.levelNames[onlineLevelIndex] = `Online: ${level.name}`;
+
+            // Set the start position if available
+            if (level.startPosition) {
+                if (!window.levelLoader.playerStartPositions) {
+                    window.levelLoader.playerStartPositions = [];
+                }
+                // Ensure the array is long enough
+                while (window.levelLoader.playerStartPositions.length <= onlineLevelIndex) {
+                    window.levelLoader.playerStartPositions.push({ x: 1, y: 12 });
+                }
+                window.levelLoader.playerStartPositions[onlineLevelIndex] = level.startPosition;
             }
 
-            // Start game
-            this.gameManager.startLevel(0);
+            // Set spike rotations if available
+            if (level.spikeRotations) {
+                if (!window.levelLoader.spikeRotations) {
+                    window.levelLoader.spikeRotations = [];
+                }
+                while (window.levelLoader.spikeRotations.length <= onlineLevelIndex) {
+                    window.levelLoader.spikeRotations.push(null);
+                }
+                window.levelLoader.spikeRotations[onlineLevelIndex] = level.spikeRotations;
+            }
+
+            // Temporarily unlock this level
+            const originalUnlockedLevels = window.levelLoader.unlockedLevels;
+            window.levelLoader.unlockedLevels = Math.max(
+                window.levelLoader.unlockedLevels,
+                onlineLevelIndex + 1
+            );
+
+            // Start the online level
+            this.gameManager.startLevel(onlineLevelIndex);
+
+            // Restore the original unlocked count after a delay
+            // This prevents the online level from permanently unlocking levels
+            setTimeout(() => {
+                window.levelLoader.unlockedLevels = originalUnlockedLevels;
+            }, 100);
+
+            // Add a flag to indicate we're playing an online level
+            window.playingOnlineLevel = true;
+            window.onlineLevelIndex = onlineLevelIndex;
 
         } catch (error) {
-            console.error('Error loading level:', error);
-            this.showError('Failed to load level');
+            console.error('Error loading online level:', error);
+            this.showError('Failed to load level: ' + error.message);
         }
-    }
-    showRatingInterface() {
+    }    showRatingInterface() {
         document.getElementById('ratingInterface').style.display = 'block';
         document.getElementById('rateLevelButton').style.display = 'none';
     }
