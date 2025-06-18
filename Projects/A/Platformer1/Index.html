@@ -275,5 +275,13 @@
 
     <!-- Load main entry point last -->
     <script src="js/app.js" type="module"></script>
+    <script>
+// Ensure online browser is available after everything loads
+    window.addEventListener('load', function() {
+        if (!window.OnlineLevelBrowser && document.getElementById('onlineLevelsButton')) {
+            console.error('OnlineLevelBrowser not loaded! Check if online-browser.js is included.');
+        }
+    });
+</script>
 </body>
 </html>
