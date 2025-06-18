@@ -253,24 +253,25 @@
         </ul>
     </div>
 
+    <!-- Firebase and API scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
     <script src="js/firebase-config.js"></script>
     <script src="js/level-api.js"></script>
 
-    <!-- Load constants first as a standard script (not module) -->
+    <!-- Game scripts (existing) -->
     <script src="js/constants.js"></script>
-
-    <!-- Load non-module scripts -->
     <script src="js/player.js"></script>
     <script src="js/renderer.js"></script>
-
-    <!-- Load module scripts -->
     <script src="js/default_levels.js" type="module"></script>
     <script src="js/audio.js" type="module"></script>
     <script src="js/levels.js" type="module"></script>
     <script src="js/ui.js" type="module"></script>
     <script src="js/game.js" type="module"></script>
+    <script src="js/app.js" type="module"></script>
+
+    <!-- Add this line -->
+    <script src="js/online-browser.js"></script>
 
     <!-- Load main entry point last -->
     <script src="js/app.js" type="module"></script>
